@@ -15,13 +15,24 @@ namespace Pulse.Services
             _geocoder = geocoder;
         }
 
-        public IEnumerable<TradeMeStandaloneEvent> GetLatestInterestingEvents()
+        public IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents()
         {
             var list = new List<TradeMeStandaloneEvent>();
             var selector = _rnd.Next(400, 500);
             for (var i = 0; i <= selector; i++)
             {
-                list.Add(GetRandomEvent());
+                list.Add(GetRandomStandaloneEvent());
+            }
+
+            return list;
+        }
+        public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents()
+        {
+            var list = new List<TradeMeInteractionEvent>();
+            var selector = _rnd.Next(400, 500);
+            for (var i = 0; i <= selector; i++)
+            {
+                list.Add(GetRandomInteractionEvent());
             }
 
             return list;
@@ -35,8 +46,33 @@ namespace Pulse.Services
                   { "Wellington","Wellington City"},
                     { "Marlborough","Blenheim"}
         };
+        public TradeMeInteractionEvent GetRandomInteractionEvent()
+        {
+            var now = DateTime.Now;
+            var locationSelector1 = _rnd.Next(0, _addressDictionary.Count);
+            var locationSelector2 = _rnd.Next(0, _addressDictionary.Count);
+            var tmEvent = new TradeMeInteractionEvent()
+            {
+                OccuredOn =
+                    new DateTime(now.Year, now.Month, now.Day, now.Hour, RandomlyOffsetMinutes(now.Minute),
+                        RandomlyOffsetSeconds()),
+                StartRegion = _addressDictionary.ElementAt(locationSelector1).Key,
+                StartSuburb = _addressDictionary.ElementAt(locationSelector1).Value,
+                EndRegion  = _addressDictionary.ElementAt(locationSelector2).Key,
+                EndSuburb = _addressDictionary.ElementAt(locationSelector2).Value
+            };
 
-        public TradeMeStandaloneEvent GetRandomEvent()
+            _geocoder.ApplyCoordinates(tmEvent);
+
+            tmEvent.StartLatitude = RandomlyOffsetCoordinate(tmEvent.StartLatitude);
+            tmEvent.StartLongitude = RandomlyOffsetCoordinate(tmEvent.StartLongitude);
+
+            tmEvent.EndLatitude = RandomlyOffsetCoordinate(tmEvent.EndLatitude);
+            tmEvent.EndLongitude = RandomlyOffsetCoordinate(tmEvent.EndLongitude);
+
+            return tmEvent;
+        }
+        public TradeMeStandaloneEvent GetRandomStandaloneEvent()
         {
             var now = DateTime.Now;
             var selector = _rnd.Next(0, _addressDictionary.Count);

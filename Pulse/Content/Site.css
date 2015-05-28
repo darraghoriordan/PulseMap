@@ -21,39 +21,33 @@ body {
 .mapPointPulse {
   box-sizing:border-box;
   background: #FFD1DC;
-  box-shadow: 0px 0px 12px 8px #FFD1DC;
-  border:5px solid #FFD1DC;
-  height: 4px;
-  width: 4px;
-  border-radius: 2px;
-  -webkit-animation: pulse 1s linear 0s 1;
-  -moz-animation: pulse 1s linear 0s 1;
-  animation: pulse 1s linear 0s 1;
+  opacity: 0.6;
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  -webkit-animation: pulse 1s ease-in-out 0s 1;
+  -moz-animation: pulse 1s ease-in-out 0s 1;
+  animation: pulse 1s ease-in-out 0s 1;
 }
 .pink {
       background: #FFD1DC;
-   box-shadow: 0px 0px 12px 8px #FFD1DC;
-  border:5px solid #FFD1DC;
+
 }
 .red {
       background: #F7977A;
-   box-shadow: 0px 0px 12px 8px #F7977A;
-  border:5px solid #F7977A;
+
 }
 .green {
       background: #C4DF9B;
-   box-shadow: 0px 0px 12px 8px #C4DF9B;
-  border:5px solid #C4DF9B;
+ 
 }
 .blue {
       background: #6ECFF6;
-   box-shadow: 0px 0px 12px 8px #6ECFF6;
-  border:5px solid #6ECFF6;
+
 }
 .yellow {
       background: #FFF79A;
-   box-shadow: 0px 0px 12px 8px #FFF79A;
-  border:5px solid #FFF79A;
+
 }
 
 /* ANIMATIONS */

@@ -29,9 +29,10 @@ namespace Pulse.Services
 
         private readonly ITradeMeEventService _tradeMeEventService;
         private readonly List<StandaloneEvent> _standaloneEvents;
+        private readonly List<InteractionEvent> _interactionEvents;
         private readonly object _updateEventsLock = new object();
         private volatile bool _updatingEvents;
-        private readonly TimeSpan _clientUpdateInterval = TimeSpan.FromMilliseconds(500);
+        private readonly TimeSpan _clientUpdateInterval = TimeSpan.FromMilliseconds(200);
         private readonly TimeSpan _trademeUpdateInterval = TimeSpan.FromMinutes(5);
         private DateTime _nextTradeMeUpdate;
         private DateTime _clientUpdateOffset;
@@ -44,6 +45,7 @@ namespace Pulse.Services
             _updateEventsTimer = new Timer(UpdateAllEvents, null, _clientUpdateInterval, _clientUpdateInterval);
 
             _standaloneEvents = new List<StandaloneEvent>();
+            _interactionEvents = new List<InteractionEvent>();
         }
 
         private IHubConnectionContext<dynamic> Clients { get; set; }
@@ -63,34 +65,38 @@ namespace Pulse.Services
                     {
                         // clear old events and grab the last 5 mins of trademe activity
                         _standaloneEvents.Clear();
-                        _standaloneEvents.AddRange(_tradeMeEventService.GetLatestInterestingEvents().Where(e => e.OccuredOn > DateTime.Now.Add(-_trademeUpdateInterval)));
+                        _standaloneEvents.AddRange(_tradeMeEventService.GetLatestStandaloneEvents().Where(e => e.OccuredOn > DateTime.Now.Add(-_trademeUpdateInterval)));
+
+                        // clear old events and grab the last 5 mins of trademe activity
+                        _interactionEvents.Clear();
+                        _interactionEvents.AddRange(_tradeMeEventService.GetLatestInteractionEvents().Where(e => e.OccuredOn > DateTime.Now.Add(-_trademeUpdateInterval)));
+                        
                         // set the next update to be sometime after now
                         _nextTradeMeUpdate = DateTime.Now.AddMinutes(_trademeUpdateInterval.Minutes);
 
                     }
                     // update the offset time for displaying results to clients
                     _clientUpdateOffset = DateTime.Now.AddMinutes(-_trademeUpdateInterval.Minutes);
+
                     // find events that happened before this time
-                    var events = _standaloneEvents.Where(e => e.OccuredOn < _clientUpdateOffset).ToList();
+                    var standaloneEventsToPush = _standaloneEvents.Where(e => e.OccuredOn < _clientUpdateOffset).ToList();
+                    var interactionEventsToPush = _interactionEvents.Where(e => e.OccuredOn < _clientUpdateOffset).ToList();
 
                     // remove the events so they're only sent to the client once.
                     _standaloneEvents.RemoveAll(e => e.OccuredOn < _clientUpdateOffset);
-
+                    _interactionEvents.RemoveAll(e => e.OccuredOn < _clientUpdateOffset);
                     // send them if any exist
-                    if (events.Any())
+                    if (standaloneEventsToPush.Any())
                     {
-                        BroadcastStandaloneListingEvents(events);
+                        Clients.All.updateStandaloneEvents(standaloneEventsToPush);
                     }
-
+                    if (interactionEventsToPush.Any())
+                    {
+                        Clients.All.updateInteractionEvents(interactionEventsToPush);
+                    }
                     _updatingEvents = false;
                 }
             }
         }
-
-        private void BroadcastStandaloneListingEvents(IEnumerable<StandaloneEvent> events)
-        {
-            Clients.All.updateStandaloneEvents(events);
-        }
-
     }
 }

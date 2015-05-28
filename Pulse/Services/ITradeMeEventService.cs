@@ -5,6 +5,7 @@ namespace Pulse.Services
 {
     public interface ITradeMeEventService
     {
-        IEnumerable<TradeMeStandaloneEvent> GetLatestInterestingEvents();
+        IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents();
+        IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents();
     }
 }

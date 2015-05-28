@@ -6,21 +6,19 @@ var PulseApp = (function () {
         var _this = this;
         this.wellington = new google.maps.LatLng(-41.28, 174.77);
         this.markers = new Array();
+        this.lines = new Array();
         this.pulseSocketConnection = $.hubConnection();
         this.pulseSocketConnection.logging = true;
         this.pulseSocketHub = this.pulseSocketConnection.createHubProxy('pulseSocketHub');
-        this.pulseSocketHub.on('updateStandaloneEvents', function (events) {
+        //this.pulseSocketHub.on('updateStandaloneEvents',(events: any[]) => {
+        //    events.forEach((event) => {
+        //        this.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude),1);
+        //    });
+        //});
+        this.pulseSocketHub.on('updateInteractionEvents', function (events) {
             events.forEach(function (event) {
-                _this.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude));
+                _this.addInteraction(new google.maps.LatLng(event.StartLatitude, event.StartLongitude), new google.maps.LatLng(event.EndLatitude, event.EndLongitude));
             });
-        });
-        $.extend(this.pulseSocketHub.client, {
-            updateStandaloneEvents: function (events) {
-                var _this = this;
-                events.forEach(function (event) {
-                    _this.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude));
-                });
-            }
         });
     }
     PulseApp.prototype.createMap = function () {
@@ -61,15 +59,34 @@ var PulseApp = (function () {
         ]);
         // This event listener will call addMarker() when the map is clicked.
         google.maps.event.addListener(this.map, 'click', function (event) {
-            _this.addMarker(event.latLng);
+            _this.addMarker(event.latLng, 1);
         });
         return this.map;
     };
+    PulseApp.prototype.addInteraction = function (startLocation, endLocation) {
+        this.addMarker(startLocation, 3);
+        this.addLineAnimation(startLocation, endLocation);
+        this.addMarker(endLocation, 3);
+    };
+    PulseApp.prototype.addLineAnimation = function (startLocation, endLocation) {
+        var path = new google.maps.Polyline({
+            path: [startLocation, endLocation],
+            geodesic: true,
+            strokeColor: '#FFFFFF',
+            strokeOpacity: 0.8,
+            strokeWeight: 2
+        });
+        this.lines.push(path);
+        path.setMap(this.map);
+        setTimeout(function () {
+            path.setMap(null);
+            delete path;
+        }, 3000);
+    };
     // Add a marker to the map and push to the array.
-    PulseApp.prototype.addMarker = function (location) {
+    PulseApp.prototype.addMarker = function (location, color) {
         var classString = 'mapPointPulse ';
-        var rand = Math.floor((Math.random() * 5) + 1);
-        switch (rand) {
+        switch (color) {
             case 1:
                 classString = classString + 'pink';
                 break;
@@ -89,7 +106,6 @@ var PulseApp = (function () {
         }
         var marker = new MarkerWithLabel({
             position: location,
-            map: this.map,
             clickable: false,
             icon: {
                 path: google.maps.SymbolPath.CIRCLE,
@@ -97,12 +113,13 @@ var PulseApp = (function () {
             },
             labelClass: classString
         });
+        marker.setMap(this.map);
         this.markers.push(marker);
         setTimeout(function () {
             marker.setMap(null);
             delete marker;
         }, 3000);
-        return marker;
+        // return marker;
     };
     PulseApp.prototype.startEventsService = function () {
         this.pulseSocketConnection.start();
