@@ -18,7 +18,7 @@ namespace Pulse.Services
         public IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents()
         {
             var list = new List<TradeMeStandaloneEvent>();
-            var selector = _rnd.Next(400, 500);
+            var selector = _rnd.Next(900, 1000);
             for (var i = 0; i <= selector; i++)
             {
                 list.Add(GetRandomStandaloneEvent());
@@ -29,7 +29,7 @@ namespace Pulse.Services
         public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents()
         {
             var list = new List<TradeMeInteractionEvent>();
-            var selector = _rnd.Next(400, 500);
+            var selector = _rnd.Next(600, 800);
             for (var i = 0; i <= selector; i++)
             {
                 list.Add(GetRandomInteractionEvent());

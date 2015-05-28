@@ -32,7 +32,7 @@ namespace Pulse.Services
         private readonly List<InteractionEvent> _interactionEvents;
         private readonly object _updateEventsLock = new object();
         private volatile bool _updatingEvents;
-        private readonly TimeSpan _clientUpdateInterval = TimeSpan.FromMilliseconds(200);
+        private readonly TimeSpan _clientUpdateInterval = TimeSpan.FromMilliseconds(400);
         private readonly TimeSpan _trademeUpdateInterval = TimeSpan.FromMinutes(5);
         private DateTime _nextTradeMeUpdate;
         private DateTime _clientUpdateOffset;

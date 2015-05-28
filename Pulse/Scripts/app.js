@@ -7,7 +7,7 @@ var PulseApp = (function () {
         this.wellington = new google.maps.LatLng(-41.28, 174.77);
         this.markers = new Array();
         this.lines = new Array();
-        this.animationTimeout = 1000; //milliseconds to delete animations
+        this.animationTimeout = 1500; //milliseconds to delete animations
         this.pulseSocketConnection = $.hubConnection();
         this.pulseSocketConnection.logging = true;
         this.pulseSocketHub = this.pulseSocketConnection.createHubProxy('pulseSocketHub');
@@ -73,7 +73,7 @@ var PulseApp = (function () {
         var path = new google.maps.Polyline({
             path: [startLocation, endLocation],
             geodesic: true,
-            strokeColor: '#FFFFFF',
+            strokeColor: '#C4DF9B',
             strokeOpacity: 0.8,
             strokeWeight: 2
         });
@@ -113,7 +113,7 @@ var PulseApp = (function () {
                 scale: 0
             },
             labelClass: classString,
-            labelAnchor: new google.maps.Point(10, 10)
+            labelAnchor: new google.maps.Point(15, 15)
         });
         marker.setMap(this.map);
         this.markers.push(marker);

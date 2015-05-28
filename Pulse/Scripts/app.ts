@@ -9,7 +9,7 @@ class PulseApp {
     lines:google.maps.Polyline[] = new Array<google.maps.Polyline>();
     pulseSocketConnection: any;
     pulseSocketHub:any;
-    animationTimeout:number=1000; //milliseconds to delete animations
+    animationTimeout:number=1500; //milliseconds to delete animations
 
     constructor() {
         this.pulseSocketConnection = $.hubConnection();
@@ -80,7 +80,7 @@ class PulseApp {
         var path = new google.maps.Polyline({
             path: [startLocation,endLocation],
             geodesic: true,
-            strokeColor: '#FFFFFF',
+            strokeColor: '#C4DF9B',
             strokeOpacity: 0.8,
             strokeWeight: 2
         });
@@ -125,7 +125,7 @@ class PulseApp {
                 scale: 0
             },
             labelClass: classString,
-            labelAnchor: new google.maps.Point(10,10)
+            labelAnchor: new google.maps.Point(15,15)
     });
         marker.setMap(this.map);
     this.markers.push(marker);
