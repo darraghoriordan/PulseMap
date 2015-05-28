@@ -7,14 +7,15 @@ var PulseApp = (function () {
         this.wellington = new google.maps.LatLng(-41.28, 174.77);
         this.markers = new Array();
         this.lines = new Array();
+        this.animationTimeout = 1000; //milliseconds to delete animations
         this.pulseSocketConnection = $.hubConnection();
         this.pulseSocketConnection.logging = true;
         this.pulseSocketHub = this.pulseSocketConnection.createHubProxy('pulseSocketHub');
-        //this.pulseSocketHub.on('updateStandaloneEvents',(events: any[]) => {
-        //    events.forEach((event) => {
-        //        this.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude),1);
-        //    });
-        //});
+        this.pulseSocketHub.on('updateStandaloneEvents', function (events) {
+            events.forEach(function (event) {
+                _this.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude), 1);
+            });
+        });
         this.pulseSocketHub.on('updateInteractionEvents', function (events) {
             events.forEach(function (event) {
                 _this.addInteraction(new google.maps.LatLng(event.StartLatitude, event.StartLongitude), new google.maps.LatLng(event.EndLatitude, event.EndLongitude));
@@ -81,7 +82,7 @@ var PulseApp = (function () {
         setTimeout(function () {
             path.setMap(null);
             delete path;
-        }, 3000);
+        }, this.animationTimeout);
     };
     // Add a marker to the map and push to the array.
     PulseApp.prototype.addMarker = function (location, color) {
@@ -111,14 +112,15 @@ var PulseApp = (function () {
                 path: google.maps.SymbolPath.CIRCLE,
                 scale: 0
             },
-            labelClass: classString
+            labelClass: classString,
+            labelAnchor: new google.maps.Point(10, 10)
         });
         marker.setMap(this.map);
         this.markers.push(marker);
         setTimeout(function () {
             marker.setMap(null);
             delete marker;
-        }, 3000);
+        }, this.animationTimeout);
         // return marker;
     };
     PulseApp.prototype.startEventsService = function () {

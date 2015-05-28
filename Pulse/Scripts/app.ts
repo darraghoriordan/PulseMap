@@ -9,17 +9,17 @@ class PulseApp {
     lines:google.maps.Polyline[] = new Array<google.maps.Polyline>();
     pulseSocketConnection: any;
     pulseSocketHub:any;
-
+    animationTimeout:number=1000; //milliseconds to delete animations
 
     constructor() {
         this.pulseSocketConnection = $.hubConnection();
         this.pulseSocketConnection.logging = true;
         this.pulseSocketHub = this.pulseSocketConnection.createHubProxy('pulseSocketHub');
-        //this.pulseSocketHub.on('updateStandaloneEvents',(events: any[]) => {
-        //    events.forEach((event) => {
-        //        this.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude),1);
-        //    });
-        //});
+        this.pulseSocketHub.on('updateStandaloneEvents',(events: any[]) => {
+            events.forEach((event) => {
+                this.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude),1);
+            });
+        });
         this.pulseSocketHub.on('updateInteractionEvents',(events: any[]) => {
             events.forEach((event) => {
                 this.addInteraction(new google.maps.LatLng(event.StartLatitude, event.StartLongitude), new google.maps.LatLng(event.EndLatitude, event.EndLongitude));
@@ -90,7 +90,7 @@ class PulseApp {
         setTimeout(() => {
             path.setMap(null);
             delete path;
-        }, 3000);
+        },this.animationTimeout);
     }
     // Add a marker to the map and push to the array.
     addMarker(location, color:number) {
@@ -118,21 +118,22 @@ class PulseApp {
 
         var marker = new MarkerWithLabel({
             position: location,
-         
+
             clickable: false,
             icon: {
                 path: google.maps.SymbolPath.CIRCLE,
                 scale: 0
             },
-            labelClass: classString
-        });
+            labelClass: classString,
+            labelAnchor: new google.maps.Point(10,10)
+    });
         marker.setMap(this.map);
     this.markers.push(marker);
 
     setTimeout(() => {
         marker.setMap(null);
         delete marker;
-        }, 3000);
+    }, this.animationTimeout);
 
        // return marker;
 
