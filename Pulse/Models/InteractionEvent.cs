@@ -9,5 +9,6 @@ namespace Pulse.Models
         public double StartLongitude { get; set; }
         public double EndLatitude { get; set; }
         public double EndLongitude { get; set; }
+
     }
 }

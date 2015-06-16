@@ -45,9 +45,6 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Dapper">
-      <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -117,8 +114,8 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -189,8 +186,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Dapper\IMapEventRepository.cs" />
-    <Compile Include="Dapper\MapEventRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -209,7 +204,6 @@
     <Compile Include="Models\IMapCoordinates.cs" />
     <Compile Include="Models\InteractionEvent.cs" />
     <Compile Include="Models\StandaloneEvent.cs" />
-    <Compile Include="Services\TradeMeEventService.cs" />
     <Compile Include="Services\FakeCoordinateResolver.cs" />
     <Compile Include="Services\GoogleApiClient.cs" />
     <Compile Include="Services\ICoordinateResolver.cs" />
@@ -230,14 +224,6 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\Dealerbase-Font.css" />
-    <Content Include="Content\fonts\museo300-regular-webfont.svg" />
-    <Content Include="Content\fonts\museo500-regular-webfont.svg" />
-    <Content Include="Content\fonts\museo700-regular-webfont.svg" />
-    <Content Include="Content\icon_listed.png" />
-    <Content Include="Content\icon_sold.png" />
-    <Content Include="Content\icon_time.png" />
-    <Content Include="Content\Logo_Pulse_900x400.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -248,16 +234,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\fonts\museo300-regular-webfont.eot" />
-    <Content Include="Content\fonts\museo300-regular-webfont.ttf" />
-    <Content Include="Content\fonts\museo300-regular-webfont.woff" />
-    <Content Include="Content\fonts\museo300-regular-webfont.woff2" />
-    <Content Include="Content\fonts\museo500-regular-webfont.eot" />
-    <Content Include="Content\fonts\museo500-regular-webfont.ttf" />
-    <Content Include="Content\fonts\museo500-regular-webfont.woff" />
-    <Content Include="Content\fonts\museo700-regular-webfont.eot" />
-    <Content Include="Content\fonts\museo700-regular-webfont.ttf" />
-    <Content Include="Content\fonts\museo700-regular-webfont.woff" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Icon.png" />
     <TypeScriptCompile Include="Scripts\app.ts" />
@@ -281,9 +257,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -295,8 +269,8 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <TypeScriptCompile Include="Scripts\typings\google.maps.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\google.maps.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\signalr\signalr.d.ts" />
   </ItemGroup>
   <ItemGroup>
@@ -333,7 +307,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52114</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://dev.pulse.trademe.local</IISUrl>
+          <IISUrl>http://pulse.trademe.co.nz</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -7,5 +7,8 @@ namespace Pulse.Services
     {
         IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents();
         IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents();
+        IEnumerable<TradeMeInteractionEvent> GetLatestCommentEvents();
+        int GetStatsSoldToday();
+        int GetStatsNewToday();
     }
 }

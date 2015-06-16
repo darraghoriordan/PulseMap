@@ -13,7 +13,7 @@ namespace Pulse
         public void Configuration(IAppBuilder app)
         {
             var hubConfiguration = new HubConfiguration();
-            hubConfiguration.EnableDetailedErrors = true;
+            hubConfiguration.EnableDetailedErrors = false;
             hubConfiguration.EnableJavaScriptProxies = true;
             app.MapSignalR(hubConfiguration);
         }

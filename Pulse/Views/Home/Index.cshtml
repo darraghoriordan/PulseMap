@@ -1,7 +1,28 @@
-﻿@{
+﻿@using System
+@{
     ViewBag.Title = "Pulse";
 }
+<div id="logoHolder">
+    <img src="~/Content/Logo_Pulse_900x400.png" />
+</div>
 <div id="map-canvas"></div>
+<div id="statsHolder">
+    <div class="statsItem" id="timeStat">
+        <span class="statsHeaderText">@DateTime.Now.Date.ToString("dd MMMM yyyy")</span>
+        <span class="statsValueText">@DateTime.Now.ToString("HH:mm:ss")</span>
+    </div>
+    <div class="statsItem" id="itemsSoldStat">
+        <span class="statsHeaderText">Items Sold</span>
+        <span class="statsValueText">Starting...</span>
+    </div>
+    <div class="statsItem" id="itemsListedStat">
+        <span class="statsHeaderText">Items Listed</span>
+        <span class="statsValueText">Starting...</span>
+    </div>
+</div>
+
+
+
 
 @section scripts{
     <script src="signalr/hubs"></script>

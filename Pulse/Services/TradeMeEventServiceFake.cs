@@ -37,6 +37,27 @@ namespace Pulse.Services
 
             return list;
         }
+        
+        public IEnumerable<TradeMeInteractionEvent> GetLatestCommentEvents()
+        {
+            var list = new List<TradeMeInteractionEvent>();
+            var selector = _rnd.Next(600, 800);
+            for (var i = 0; i <= selector; i++)
+            {
+                list.Add(GetRandomInteractionEvent());
+            }
+
+            return list;
+        }
+        public int GetStatsSoldToday()
+        {
+            return 10000;
+        }
+
+        public int GetStatsNewToday()
+        {
+            return 10000;
+        }
 
         private readonly Dictionary<string, string> _addressDictionary = new Dictionary<string, string>()
         {
@@ -55,7 +76,7 @@ namespace Pulse.Services
             {
                 OccuredOn =
                     new DateTime(now.Year, now.Month, now.Day, now.Hour, RandomlyOffsetMinutes(now.Minute),
-                        RandomlyOffsetSeconds()),
+                        RandomlyOffsetSeconds(), RandomlyOffsetMilliseconds()),
                 StartRegion = _addressDictionary.ElementAt(locationSelector1).Key,
                 StartSuburb = _addressDictionary.ElementAt(locationSelector1).Value,
                 EndRegion  = _addressDictionary.ElementAt(locationSelector2).Key,
@@ -80,7 +101,7 @@ namespace Pulse.Services
             {
                 OccuredOn =
                     new DateTime(now.Year, now.Month, now.Day, now.Hour, RandomlyOffsetMinutes(now.Minute),
-                        RandomlyOffsetSeconds()),
+                        RandomlyOffsetSeconds(), RandomlyOffsetMilliseconds()),
                 Region = _addressDictionary.ElementAt(selector).Key,
                 Suburb = _addressDictionary.ElementAt(selector).Value
             };
@@ -107,7 +128,12 @@ namespace Pulse.Services
 
             return _rnd.Next(maximum);
         }
+        public int RandomlyOffsetMilliseconds()
+        {
+            int maximum = 999;
 
+            return _rnd.Next(maximum);
+        }
         public double RandomlyOffsetCoordinate(double number)
         {
             double minimum = number - .3;

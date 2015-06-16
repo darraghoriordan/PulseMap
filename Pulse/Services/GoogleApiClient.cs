@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
@@ -48,8 +49,10 @@ namespace Pulse.Services
                 locality.Longitude = longitude;
 
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                var message = exception.Message;
+                Debug.WriteLine(message);
                 //log and stop asking google until fixed
             }
         }

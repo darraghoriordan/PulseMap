@@ -17,7 +17,7 @@ namespace Pulse.Services
         // Singleton instance
         // this also acts as a poor man's DI container :D
         private readonly static Lazy<PulseEventService> _instance = new Lazy<PulseEventService>(
-            () => new PulseEventService(GlobalHost.ConnectionManager.GetHubContext<PulseSocketHub>().Clients, new TradeMeEventServiceFake(new GeoCoder(new GoogleApiClient(), ApplicationDbContext.Create()))));
+            () => new PulseEventService(GlobalHost.ConnectionManager.GetHubContext<PulseSocketHub>().Clients, new TradeMeEventService(new GeoCoder(new GoogleApiClient(), ApplicationDbContext.Create()))));
         
         public static PulseEventService Instance
         {
@@ -30,6 +30,7 @@ namespace Pulse.Services
         private readonly ITradeMeEventService _tradeMeEventService;
         private readonly List<StandaloneEvent> _standaloneEvents;
         private readonly List<InteractionEvent> _interactionEvents;
+        private readonly List<InteractionEvent> _commentEvents;
         private readonly object _updateEventsLock = new object();
         private volatile bool _updatingEvents;
         private readonly TimeSpan _clientUpdateInterval = TimeSpan.FromMilliseconds(400);
@@ -37,6 +38,9 @@ namespace Pulse.Services
         private DateTime _nextTradeMeUpdate;
         private DateTime _clientUpdateOffset;
         private Timer _updateEventsTimer;
+        private int _statsSoldToday;
+        private int _statsNewToday;
+
 
         private PulseEventService(IHubConnectionContext<dynamic> clients, ITradeMeEventService tradeMeEventService)
         {
@@ -46,6 +50,7 @@ namespace Pulse.Services
 
             _standaloneEvents = new List<StandaloneEvent>();
             _interactionEvents = new List<InteractionEvent>();
+            _commentEvents = new List<InteractionEvent>();
         }
 
         private IHubConnectionContext<dynamic> Clients { get; set; }
@@ -63,6 +68,10 @@ namespace Pulse.Services
                     // should we update from trademe
                     if (_nextTradeMeUpdate <= DateTime.Now)
                     {
+
+                        // set the next update to be sometime after now
+                        _nextTradeMeUpdate = DateTime.Now.AddMinutes(_trademeUpdateInterval.Minutes);
+
                         // clear old events and grab the last 5 mins of trademe activity
                         _standaloneEvents.Clear();
                         _standaloneEvents.AddRange(_tradeMeEventService.GetLatestStandaloneEvents().Where(e => e.OccuredOn > DateTime.Now.Add(-_trademeUpdateInterval)));
@@ -71,8 +80,13 @@ namespace Pulse.Services
                         _interactionEvents.Clear();
                         _interactionEvents.AddRange(_tradeMeEventService.GetLatestInteractionEvents().Where(e => e.OccuredOn > DateTime.Now.Add(-_trademeUpdateInterval)));
                         
-                        // set the next update to be sometime after now
-                        _nextTradeMeUpdate = DateTime.Now.AddMinutes(_trademeUpdateInterval.Minutes);
+                        // same for comments
+                        _commentEvents.Clear();
+                        _commentEvents.AddRange(_tradeMeEventService.GetLatestCommentEvents().Where(e => e.OccuredOn > DateTime.Now.Add(-_trademeUpdateInterval)));
+                        
+                        // refresh these every time to correct any possible 'drift' :)
+                        _statsSoldToday = _tradeMeEventService.GetStatsSoldToday();
+                        _statsNewToday = _tradeMeEventService.GetStatsNewToday();
 
                     }
                     // update the offset time for displaying results to clients
@@ -81,10 +95,19 @@ namespace Pulse.Services
                     // find events that happened before this time
                     var standaloneEventsToPush = _standaloneEvents.Where(e => e.OccuredOn < _clientUpdateOffset).ToList();
                     var interactionEventsToPush = _interactionEvents.Where(e => e.OccuredOn < _clientUpdateOffset).ToList();
+                    var commentEventstoPush = _commentEvents.Where(e => e.OccuredOn < _clientUpdateOffset).ToList();
 
+                    _statsSoldToday += interactionEventsToPush.Count();
+                    _statsNewToday += standaloneEventsToPush.Count();
+                    
+                    //update these now
+                    Clients.All.updateNewListingsStat(String.Format("{0:n0}", _statsNewToday));
+                    Clients.All.updateSoldTodayStat(string.Format("{0:n0}", _statsSoldToday));
                     // remove the events so they're only sent to the client once.
                     _standaloneEvents.RemoveAll(e => e.OccuredOn < _clientUpdateOffset);
                     _interactionEvents.RemoveAll(e => e.OccuredOn < _clientUpdateOffset);
+                    _commentEvents.RemoveAll(e => e.OccuredOn < _clientUpdateOffset);
+
                     // send them if any exist
                     if (standaloneEventsToPush.Any())
                     {
@@ -94,6 +117,11 @@ namespace Pulse.Services
                     {
                         Clients.All.updateInteractionEvents(interactionEventsToPush);
                     }
+                    if (commentEventstoPush.Any())
+                    {
+                        Clients.All.updateCommentEvents(commentEventstoPush);
+                    }
+
                     _updatingEvents = false;
                 }
             }
