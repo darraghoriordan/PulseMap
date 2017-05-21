@@ -1,6 +1,5 @@
 /// <reference path="typings/google.maps.d.ts" />
 /// <reference path="typings/jquery/jquery.d.ts" />
-/// <reference path="typings/signalr/signalr.d.ts" />
 var PulseApp = (function () {
     function PulseApp() {
         var _this = this;
@@ -343,4 +342,3 @@ $(document).ready(function () {
     mapHelper.createMap();
     mapHelper.startEventsService();
 });
-//# sourceMappingURL=app.js.map

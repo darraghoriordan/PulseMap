@@ -1,6 +1,6 @@
 ﻿/// <reference path="typings/google.maps.d.ts" />
 /// <reference path="typings/jquery/jquery.d.ts" />
-/// <reference path="typings/signalr/signalr.d.ts" />
+
 
 class PulseApp {
     wellington = new google.maps.LatLng(-41.28, 174.77);
@@ -22,7 +22,6 @@ class PulseApp {
             events.forEach((event) => {
                 this.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude), 1, 'normal');
             });
-
         });
         this.pulseSocketHub.on('updateInteractionEvents',(events: any[]) => {
             events.forEach((event) => {
