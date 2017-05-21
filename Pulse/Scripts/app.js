@@ -41,9 +41,7 @@ var PulseApp = (function () {
         this.pulseSocketHub.on('updateSoldTodayStat', function (stat) {
             $('#itemsSoldStat .statsValueText').text(stat);
         });
-        setInterval(function () {
-            _this.setTime();
-        }, 1000);
+        setInterval(function () { _this.setTime(); }, 1000);
     }
     PulseApp.prototype.checkTime = function (i) {
         return (i < 10) ? '0' + i : i;
@@ -239,9 +237,9 @@ var PulseApp = (function () {
         var path = new google.maps.Polyline({
             path: [startLocation, endLocation],
             icons: [{
-                icon: this.lineSymbol,
-                offset: '0%'
-            }],
+                    icon: this.lineSymbol,
+                    offset: '0%'
+                }],
             geodesic: true,
             strokeColor: strokeColor,
             strokeOpacity: 0.2,
@@ -339,7 +337,7 @@ var PulseApp = (function () {
         }
     };
     return PulseApp;
-})();
+}());
 $(document).ready(function () {
     var mapHelper = new PulseApp();
     mapHelper.createMap();
