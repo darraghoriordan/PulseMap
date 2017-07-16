@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,18 +8,21 @@ using Pulse.Models;
 
 namespace Pulse.Services
 {
-    public class GoogleApiClient : HttpClient, ICoordinateResolver
+    public class GoogleApiCoordinateResolver : HttpClient, ICoordinateResolver
     {
-        public GoogleApiClient()
+        private readonly ISettingsService _settingsService;
+
+        public GoogleApiCoordinateResolver(ISettingsService settingsService)
         {
-            this.BaseAddress = new Uri(SettingsService.GoogleGeoCodingApiUrl);
-            this.DefaultRequestHeaders.Clear();
-            this.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _settingsService = settingsService;
+            BaseAddress = new Uri(_settingsService.GoogleGeoCodingApiUrl);
+            DefaultRequestHeaders.Clear();
+            DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public static string GetUrl(string region, string suburb)
+        public string GetUrl(string region, string suburb)
         {
-            var builder = new UriBuilder(SettingsService.GoogleGeoCodingApiUrl);
+            var builder = new UriBuilder(_settingsService.GoogleGeoCodingApiUrl);
             builder.Port = -1;
             var query = HttpUtility.ParseQueryString(builder.Query);
             query["address"] = region + "," + suburb;
@@ -30,9 +32,8 @@ namespace Pulse.Services
             return builder.ToString();
         }
 
-        public static void ParseGoogleApiResponse(string googleGeoCodeResponseJson, GoogleGeoCodeResponse locality)
+        public void ParseGoogleApiResponse(string googleGeoCodeResponseJson, GoogleGeoCodeResponse locality)
         {
-            
             try
             {
                 double latitiude;
@@ -53,23 +54,20 @@ namespace Pulse.Services
             {
                 var message = exception.Message;
                 Debug.WriteLine(message);
-                //log and stop asking google until fixed
             }
         }
 
         public void ApplyCoordinatesToLocality(GoogleGeoCodeResponse locality)
         {
             //not async:)
-            var result = this.GetAsync(GetUrl(locality.Region, locality.Suburb)).Result;
+            var result = GetAsync(GetUrl(locality.Region, locality.Suburb)).Result;
             if (!result.IsSuccessStatusCode)
             {
                 return;
             }
             string content = result.Content.ReadAsStringAsync().Result;
 
-           ParseGoogleApiResponse(content, locality);
-
+            ParseGoogleApiResponse(content, locality);
         }
-
     }
 }

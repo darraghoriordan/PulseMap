@@ -4,7 +4,7 @@ using Pulse.Models;
 
 namespace Pulse.Services
 {
-    public class GeoCoder
+    public class GeoCoder : IGeoCoder
     {
         private readonly ICoordinateResolver _coordinateResolver;
         private readonly List<GoogleGeoCodeResponse> _coords;
@@ -26,7 +26,7 @@ namespace Pulse.Services
             _localityDbContext.SaveChanges();
         }
 
-        public void ApplyCoordinates(TradeMeInteractionEvent tmEvent)
+        public TradeMeInteractionEvent ApplyCoordinates(TradeMeInteractionEvent tmEvent)
         {
             var startLocality = GetLocality(tmEvent.StartRegion, tmEvent.StartSuburb);
             tmEvent.StartLatitude = startLocality.Latitude;
@@ -36,6 +36,7 @@ namespace Pulse.Services
             tmEvent.EndLatitude = endLocality.Latitude;
             tmEvent.EndLongitude = endLocality.Longitude;
 
+            return tmEvent;
         }
 
         private GoogleGeoCodeResponse GetLocality(string region, string suburb)
@@ -63,7 +64,7 @@ namespace Pulse.Services
             return locality;
         }
 
-        public void ApplyCoordinates(TradeMeStandaloneEvent tmEvent)
+        public TradeMeStandaloneEvent ApplyCoordinates(TradeMeStandaloneEvent tmEvent)
         {
             var locality = GetLocality(tmEvent.Region, tmEvent.Suburb);
 
@@ -71,6 +72,7 @@ namespace Pulse.Services
             tmEvent.Latitude = locality.Latitude;
             tmEvent.Longitude = locality.Longitude;
 
+            return tmEvent;
         }
     }
 }

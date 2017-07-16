@@ -1,25 +1,11 @@
 ﻿namespace Pulse.Services
 {
-    public class SettingsService
+    public class SettingsService : ISettingsService
     {
-        public static string GoogleGeoCodingApiUrl
-        {
-            get { return "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDNL201u2ck7_67jdYM6L-Li2UAfFlQCHo"; }
-        }
+        public string GoogleGeoCodingApiUrl => "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDNL201u2ck7_67jdYM6L-Li2UAfFlQCHo";
 
-        public static string GoogleMapsUrl
-        {
-            get { return "https://maps.googleapis.com/maps/api/js?key=AIzaSyDNL201u2ck7_67jdYM6L-Li2UAfFlQCHo"; }
-        }
+        public string GoogleMapsUrl => "https://maps.googleapis.com/maps/api/js?key=AIzaSyDNL201u2ck7_67jdYM6L-Li2UAfFlQCHo";
 
-        public static int OffsetInHours
-        {
-            get
-            {
-                return 5;
-            }
-        }
-
-        
+        public int OffsetInHours => 5;
     }
 }

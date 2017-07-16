@@ -10,11 +10,9 @@ namespace Pulse.Services
     [HubName("pulseSocketHub")]
     public class PulseSocketHub : Hub
     {
-        private readonly PulseEventService _pulseEventService;
-
-        public PulseSocketHub() : this(PulseEventService.Instance) { }
-
-        public PulseSocketHub(PulseEventService pulseEventService)
+        private readonly IPulseEventService _pulseEventService;
+        
+        public PulseSocketHub(IPulseEventService pulseEventService)
         {
             _pulseEventService = pulseEventService;
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Pulse.Models;
 
@@ -11,16 +10,8 @@ namespace Pulse.Services
     /// <summary>
     /// this is going to be one big horrible controller for getting all the info every 'tick' we're interested in and updating any clients accordingly.
     /// </summary>
-    public class PulseEventService
+    public class PulseEventService : IPulseEventService
     {
-       
-        // Singleton instance
-        // this also acts as a poor man's DI container :D
-        private static readonly Lazy<PulseEventService> _instance = new Lazy<PulseEventService>(
-            () => new PulseEventService(GlobalHost.ConnectionManager.GetHubContext<PulseSocketHub>().Clients, new TradeMeEventServiceFake(new GeoCoder(new FakeCoordinateResolver(), ApplicationDbContext.Create()))));
-        
-        public static PulseEventService Instance => _instance.Value;
-
         private readonly ITradeMeEventService _tradeMeEventService;
         private readonly List<StandaloneEvent> _standaloneEvents;
         private readonly List<InteractionEvent> _interactionEvents;
@@ -47,9 +38,9 @@ namespace Pulse.Services
             _commentEvents = new List<InteractionEvent>();
         }
 
-        private IHubConnectionContext<dynamic> Clients { get; set; }
+        public IHubConnectionContext<dynamic> Clients { get; set; }
 
-        private void UpdateAllEvents(object state)
+        public void UpdateAllEvents(object state)
         {
             // This function must be re-entrant as it's running as a timer interval handler
             // but we do everything in here so don't have to be tooooo careful

@@ -1,5 +1,3 @@
-using System;
-
 namespace Pulse.Models
 {
     public class TradeMeStandaloneEvent : StandaloneEvent

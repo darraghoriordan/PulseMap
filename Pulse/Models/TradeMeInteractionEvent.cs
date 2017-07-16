@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Pulse.Models
+﻿namespace Pulse.Models
 {
    public class TradeMeInteractionEvent : InteractionEvent
     {
