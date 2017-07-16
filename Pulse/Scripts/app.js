@@ -342,3 +342,4 @@ $(document).ready(function () {
     mapHelper.createMap();
     mapHelper.startEventsService();
 });
+//# sourceMappingURL=app.js.map
