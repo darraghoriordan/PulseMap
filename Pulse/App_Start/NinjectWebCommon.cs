@@ -1,3 +1,5 @@
+using Pulse.Services;
+
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Pulse.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(Pulse.App_Start.NinjectWebCommon), "Stop")]
 
@@ -22,7 +24,11 @@ namespace Pulse.App_Start
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
+           
             bootstrapper.Initialize(CreateKernel);
+           
+           var start = bootstrapper.Kernel.Get<IPulseEventService>();
+
         }
         
         /// <summary>

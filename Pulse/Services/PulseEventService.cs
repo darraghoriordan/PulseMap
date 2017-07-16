@@ -27,7 +27,7 @@ namespace Pulse.Services
         private int _statsNewToday;
 
 
-        private PulseEventService(IHubConnectionContext<dynamic> clients, ITradeMeEventService tradeMeEventService, ISettingsService settingsService)
+        public PulseEventService(IHubConnectionContext<dynamic> clients, ITradeMeEventService tradeMeEventService, ISettingsService settingsService)
         {
             _tradeMeEventService = tradeMeEventService;
             _settingsService = settingsService;
