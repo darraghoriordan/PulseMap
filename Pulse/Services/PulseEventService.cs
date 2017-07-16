@@ -16,16 +16,10 @@ namespace Pulse.Services
        
         // Singleton instance
         // this also acts as a poor man's DI container :D
-        private readonly static Lazy<PulseEventService> _instance = new Lazy<PulseEventService>(
-            () => new PulseEventService(GlobalHost.ConnectionManager.GetHubContext<PulseSocketHub>().Clients, new TradeMeEventServiceFake(new GeoCoder(new GoogleApiClient(), ApplicationDbContext.Create()))));
+        private static readonly Lazy<PulseEventService> _instance = new Lazy<PulseEventService>(
+            () => new PulseEventService(GlobalHost.ConnectionManager.GetHubContext<PulseSocketHub>().Clients, new TradeMeEventServiceFake(new GeoCoder(new FakeCoordinateResolver(), ApplicationDbContext.Create()))));
         
-        public static PulseEventService Instance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
+        public static PulseEventService Instance => _instance.Value;
 
         private readonly ITradeMeEventService _tradeMeEventService;
         private readonly List<StandaloneEvent> _standaloneEvents;
