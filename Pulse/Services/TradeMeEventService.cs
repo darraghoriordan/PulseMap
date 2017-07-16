@@ -9,38 +9,38 @@ namespace Pulse.Services
     public class TradeMeEventService : ITradeMeEventService
     {
  
-        private readonly GeoCoder geocoder;
-        readonly Random rnd = new Random();
-        private readonly IMapEventRepository tradeMeRepository = new MapEventRepository();
+        private readonly GeoCoder _geocoder;
+        readonly Random _rnd = new Random();
+        private readonly IMapEventRepository _tradeMeRepository = new MapEventRepository();
 
         public TradeMeEventService(GeoCoder geocoder)
         {
-            this.geocoder = geocoder;
+            this._geocoder = geocoder;
         }
 
         public IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents()
         {
-            var listTmEvent = tradeMeRepository.GetSingleMapEvents();
+            var listTmEvent = _tradeMeRepository.GetSingleMapEvents();
             return listTmEvent.Select(GetStandaloneEvent).ToList();
         }
         public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents()
         {
-            var listTmEvent = tradeMeRepository.GetInteractionMapEvents();
+            var listTmEvent = _tradeMeRepository.GetInteractionMapEvents();
             return listTmEvent.Select(GetInteractionEvent).ToList();
         }
         public IEnumerable<TradeMeInteractionEvent> GetLatestCommentEvents()
         {
-            var listTmEvent = tradeMeRepository.GetComments();
+            var listTmEvent = _tradeMeRepository.GetComments();
             return listTmEvent.Select(GetInteractionEvent).ToList();
         }
         public int GetStatsSoldToday()
         {
-            return tradeMeRepository.GetSoldToday();
+            return _tradeMeRepository.GetSoldToday();
         }
 
         public int GetStatsNewToday()
         {
-            return tradeMeRepository.GetNewToday();
+            return _tradeMeRepository.GetNewToday();
         }
 
 
@@ -49,7 +49,7 @@ namespace Pulse.Services
 
             myEvent.OccuredOn = myEvent.OccuredOn.AddHours(24 - SettingsService.OffsetInHours);
 
-            geocoder.ApplyCoordinates(myEvent);
+            _geocoder.ApplyCoordinates(myEvent);
 
             myEvent.StartLatitude = RandomlyOffsetCoordinate(myEvent.StartLatitude);
             myEvent.StartLongitude = RandomlyOffsetCoordinate(myEvent.StartLongitude);
@@ -63,7 +63,7 @@ namespace Pulse.Services
 
         public TradeMeStandaloneEvent GetStandaloneEvent(TradeMeStandaloneEvent myEvent)
         {
-            geocoder.ApplyCoordinates(myEvent);
+            _geocoder.ApplyCoordinates(myEvent);
             myEvent.OccuredOn = myEvent.OccuredOn.AddHours(24 - SettingsService.OffsetInHours);
             myEvent.Latitude = RandomlyOffsetCoordinate(myEvent.Latitude);
             myEvent.Longitude = RandomlyOffsetCoordinate(myEvent.Longitude);
@@ -76,7 +76,7 @@ namespace Pulse.Services
             double minimum = number - .01;
             double maximum = number + .01;
 
-            return rnd.NextDouble() * (maximum - minimum) + minimum;
+            return _rnd.NextDouble() * (maximum - minimum) + minimum;
         }
 
     }
