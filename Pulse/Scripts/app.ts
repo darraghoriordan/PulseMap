@@ -43,8 +43,6 @@ class PulseApp {
         });
 
         setInterval(() => { this.setTime(); }, 1000);
-
-
     }
     checkTime(i) {
         return (i < 10) ? '0' + i : i;
