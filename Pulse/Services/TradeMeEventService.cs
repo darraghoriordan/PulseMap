@@ -7,11 +7,11 @@ namespace Pulse.Services
 {
     public class TradeMeEventService : ITradeMeEventService
     {
-        private readonly GeoCoder _geocoder;
+        private readonly IGeoCoder _geocoder;
         private readonly IMapEventRepository _mapEventRepository;
         private readonly IEventOffsetService _eventOffsetService;
 
-        public TradeMeEventService(GeoCoder geocoder, IMapEventRepository mapEventRepository, IEventOffsetService eventOffsetService)
+        public TradeMeEventService(IGeoCoder geocoder, IMapEventRepository mapEventRepository, IEventOffsetService eventOffsetService)
         {
             _geocoder = geocoder;
             _mapEventRepository = mapEventRepository;

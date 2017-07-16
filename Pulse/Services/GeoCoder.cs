@@ -8,22 +8,16 @@ namespace Pulse.Services
     {
         private readonly ICoordinateResolver _coordinateResolver;
         private readonly List<GoogleGeoCodeResponse> _coords;
-        private readonly ILocalityDbContext _localityDbContext;
+        private readonly ILocalityStoreService _localityStoreService;
 
-        public GeoCoder(ICoordinateResolver coordinateResolver, ILocalityDbContext localityDbContext)
+        public GeoCoder(ICoordinateResolver coordinateResolver, ILocalityStoreService localityStoreService)
         {
             _coordinateResolver = coordinateResolver;
-            _localityDbContext = localityDbContext;
+            _localityStoreService = localityStoreService;
             _coords = new List<GoogleGeoCodeResponse>();
     
             //read localities from db to memory
-            _coords.AddRange(_localityDbContext.Localities);     
-        }
-
-        private void StoreLocalityInPermmenantCache(GoogleGeoCodeResponse locality)
-        {
-            _localityDbContext.Localities.Add(locality);
-            _localityDbContext.SaveChanges();
+            _coords.AddRange(_localityStoreService.GetLocalities());     
         }
 
         public TradeMeInteractionEvent ApplyCoordinates(TradeMeInteractionEvent tmEvent)
@@ -58,7 +52,7 @@ namespace Pulse.Services
                 _coordinateResolver.ApplyCoordinatesToLocality(locality);
 
                 //store it in the db and the local memory cache
-                StoreLocalityInPermmenantCache(locality);
+                _localityStoreService.SaveLocality(locality);
                 _coords.Add(locality);
             }
             return locality;

@@ -4,7 +4,7 @@ namespace Pulse.Models
 {
     public interface ILocalityDbContext
     {
-        DbSet<GoogleGeoCodeResponse> Localities { get; set; }
+        IDbSet<GoogleGeoCodeResponse> Localities { get; set; }
         int SaveChanges();
     }
 }

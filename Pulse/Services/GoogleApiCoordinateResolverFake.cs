@@ -2,7 +2,7 @@
 
 namespace Pulse.Services
 {
-    public class FakeCoordinateResolver : ICoordinateResolver
+    public class GoogleApiCoordinateResolverFake : ICoordinateResolver
     {
         public void ApplyCoordinatesToLocality(GoogleGeoCodeResponse locality)
         {

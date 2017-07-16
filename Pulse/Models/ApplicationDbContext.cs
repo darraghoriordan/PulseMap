@@ -17,7 +17,7 @@ namespace Pulse.Models
             return base.SaveChanges();
         }
 
-        public DbSet<GoogleGeoCodeResponse> Localities { get; set; }
+        public IDbSet<GoogleGeoCodeResponse> Localities { get; set; }
 
         public static ApplicationDbContext Create()
         {

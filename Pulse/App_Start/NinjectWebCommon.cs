@@ -62,6 +62,10 @@ namespace Pulse.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Load(new NinjectModules.MainNinjectModule());
+            // use the following for testing
+
+            kernel.Load(new NinjectModules.FakedNinjectModule());
+
         }        
     }
 }

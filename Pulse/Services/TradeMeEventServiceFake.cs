@@ -7,10 +7,10 @@ namespace Pulse.Services
 {
     public class TradeMeEventServiceFake : ITradeMeEventService
     {
-        private readonly GeoCoder _geocoder;
+        private readonly IGeoCoder _geocoder;
         readonly Random _rnd = new Random();
 
-        public TradeMeEventServiceFake(GeoCoder geocoder)
+        public TradeMeEventServiceFake(IGeoCoder geocoder)
         {
             _geocoder = geocoder;
         }
