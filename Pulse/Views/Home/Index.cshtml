@@ -25,7 +25,8 @@
 
 
 @section scripts{
-    <script src="signalr/hubs"></script>
+    @Scripts.Render("~/bundles/signalr")
+    <script src="/signalr/hubs"></script>
     <script type="text/javascript" src="~/Scripts/app.js"></script>
     <script src="~/Scripts/markerwithlabel.js"></script>
 
