@@ -1,60 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
 using Pulse.Models;
-using Pulse.Services;
 
 namespace Pulse.Dapper
 {
     public class MapEventRepository : IMapEventRepository
     {
-        private readonly IDbConnection _db = new SqlConnection(ConfigurationManager.ConnectionStrings["TMDATAConnection"].ConnectionString);
+        protected SqlConnection GetConnection()
+        { return new SqlConnection(ConfigurationManager.ConnectionStrings["TMDATAConnection"].ConnectionString); }
 
-        private readonly string _queryDateOffset;
-
-
-        public MapEventRepository(ISettingsService settingsService)
+        private DateTime OffSetDateTimeForDataWarehouse(DateTime input)
         {
-            _queryDateOffset= string.Format("DECLARE @dateNow DATETIME = DATEADD(hour,-{0},GETDATE());",
-                (24 - settingsService.OffsetInHours));
+            return input.AddDays(-1);
         }
 
-        public IList<TradeMeStandaloneEvent> GetSingleMapEvents()
+        public IList<TradeMeStandaloneEvent> GetSingleMapEvents(DateTime startDate, DateTime endDate)
         {
-            var query = string.Format("{0}{1}{2}{3}",
-                                      _queryDateOffset,
-                                      "SELECT categoryId as CategoryId, startdate as OccuredOn, s.suburbname as Suburb, r.RegionName as Region from trademe.dbo.auction a (NOLOCK) ",
-                                      "INNER join trademe.dbo.suburb s (NOLOCK) on s.SuburbId = a.suburbid INNER join trademe.dbo.Region r (NOLOCK) on r.RegionId = s.Regionid ",
-                                      "WHERE [startdate]>=DATEADD(minute,-10,@dateNow) AND [startdate]<@dateNow ORDER BY startdate asc;");
-            return
-                _db.Query<TradeMeStandaloneEvent>(
-                    query)
+            startDate = OffSetDateTimeForDataWarehouse(startDate);
+            endDate = OffSetDateTimeForDataWarehouse(endDate);
+            using (var conn = GetConnection())
+            {
+                return
+                    conn.Query<TradeMeStandaloneEvent>(
+                                 @"SELECT categoryId as CategoryId, startdate as OccuredOn, s.suburbname as Suburb, r.RegionName as Region from trademe.dbo.auction a (NOLOCK)
+                                      INNER join trademe.dbo.suburb s (NOLOCK) on s.SuburbId = a.suburbid INNER join trademe.dbo.Region r (NOLOCK) on r.RegionId = s.Regionid
+                                      WHERE [startdate]>=@startDate AND [startdate]<@endDate ORDER BY startdate asc;", new { startDate, endDate })
+                        .ToList();
+            }
+        }
+
+        public IList<TradeMeInteractionEvent> GetInteractionMapEvents(DateTime startDate, DateTime endDate)
+        {
+            startDate = OffSetDateTimeForDataWarehouse(startDate);
+            endDate = OffSetDateTimeForDataWarehouse(endDate);
+            using (var conn = GetConnection())
+            {
+                return
+                conn.Query<TradeMeInteractionEvent>(
+                                                          @"SELECT a.categoryId as CategoryId, vws.[sold_date] as OccuredOn ,r1.RegionName as StartRegion,s1.suburbname as StartSuburb,r2.RegionName as EndRegion,s2.suburbname as EndSuburb FROM [trademe].[dbo].[auction_sold] vws (NOLOCK) 
+                                     INNER join [dbo].[Member] m (NOLOCK) on  vws.seller_id = m.MemberId INNER join [dbo].[Member] mm (NOLOCK) on  vws.buyer_id = mm.MemberId
+                                     INNER join trademe.dbo.suburb s1 (NOLOCK) on s1.SuburbId = m.suburbid INNER join trademe.dbo.Region r1 (NOLOCK) on r1.RegionId = s1.Regionid 
+                                     INNER join trademe.dbo.suburb s2 (NOLOCK) on s2.SuburbId = mm.suburbid INNER join trademe.dbo.Region r2 (NOLOCK) on r2.RegionId = s2.Regionid 
+                                     INNER join trademe.dbo.auction a (NOLOCK) on a.AuctionId = vws.reference_id
+                                     where [sold_date]>=@startDate AND [sold_date]<@endDate ORDER BY sold_date asc", new { startDate, endDate })
                     .ToList();
+            }
         }
-
-
-        public IList<TradeMeInteractionEvent> GetInteractionMapEvents()
+        public IList<TradeMeInteractionEvent> GetComments(DateTime startDate, DateTime endDate)
         {
-            var query = String.Format("{0}{1}{2}{3}{4}{5}{6}",
-                                      _queryDateOffset,
-                                      "SELECT a.categoryId as CategoryId, vws.[sold_date] as OccuredOn ,r1.RegionName as StartRegion,s1.suburbname as StartSuburb,r2.RegionName as EndRegion,s2.suburbname as EndSuburb FROM [trademe].[dbo].[auction_sold] vws (NOLOCK) ",
-                                      "INNER join [dbo].[Member] m (NOLOCK) on  vws.seller_id = m.MemberId INNER join [dbo].[Member] mm (NOLOCK) on  vws.buyer_id = mm.MemberId ",
-                                      "INNER join trademe.dbo.suburb s1 (NOLOCK) on s1.SuburbId = m.suburbid INNER join trademe.dbo.Region r1 (NOLOCK) on r1.RegionId = s1.Regionid ",
-                                      "INNER join trademe.dbo.suburb s2 (NOLOCK) on s2.SuburbId = mm.suburbid INNER join trademe.dbo.Region r2 (NOLOCK) on r2.RegionId = s2.Regionid ",
-                                      "INNER join trademe.dbo.auction a (NOLOCK) on a.AuctionId = vws.reference_id ",
-                                      "where [sold_date]>=DATEADD(minute,-10,@dateNow) AND [sold_date]<@dateNow ORDER BY sold_date asc");
-            return
-                _db.Query<TradeMeInteractionEvent>(
-                    query)
-                    .ToList();
-        }
-        public IList<TradeMeInteractionEvent> GetComments()
-        {
-            var query =_queryDateOffset +  @"
+            startDate = OffSetDateTimeForDataWarehouse(startDate);
+            endDate = OffSetDateTimeForDataWarehouse(endDate);
+            var query = @"
 SELECT a.categoryId as CategoryId, vws.[date_entered] as OccuredOn ,r1.RegionName as StartRegion,s1.suburbname as StartSuburb,r2.RegionName as EndRegion,s2.suburbname as EndSuburb  FROM [trademe].[dbo].[listing_comment] vws (NOLOCK) 
                                             INNER join trademe.dbo.auction a (NOLOCK) on a.AuctionId = vws.listing_id
 									 INNER join [dbo].[Member] auctionMember (NOLOCK) on  vws.member_id = auctionMember.MemberId 
@@ -63,7 +63,7 @@ SELECT a.categoryId as CategoryId, vws.[date_entered] as OccuredOn ,r1.RegionNam
                                       INNER join trademe.dbo.suburb s2 (NOLOCK) on s2.SuburbId = auctionMember.suburbid 
 									  INNER join trademe.dbo.Region r2 (NOLOCK) on r2.RegionId = s2.Regionid 
 								  and vws.response is null
-  where [date_entered]>=DATEADD(minute,-10,@dateNow) AND [date_entered]<@dateNow 
+  where [date_entered]>=@startDate AND [date_entered]<@endDate
 union
 SELECT a.categoryId as CategoryId, vws.response_date as OccuredOn ,r1.RegionName as StartRegion,s1.suburbname as StartSuburb,r2.RegionName as EndRegion,s2.suburbname as EndSuburb  FROM [trademe].[dbo].[listing_comment] vws (NOLOCK) 
                                             INNER join trademe.dbo.auction a (NOLOCK) on a.AuctionId = vws.listing_id
@@ -75,29 +75,38 @@ SELECT a.categoryId as CategoryId, vws.response_date as OccuredOn ,r1.RegionName
 									  INNER join trademe.dbo.Region r2 (NOLOCK) on r2.RegionId = s2.Regionid 
 									
                               
-  where response_date>=DATEADD(minute,-10,@dateNow) AND response_date<@dateNow  ORDER BY OccuredOn asc";
-            return
-                _db.Query<TradeMeInteractionEvent>(
-                    query)
+  where response_date>=@startDate AND response_date<@endDate  ORDER BY OccuredOn asc";
+
+            using (var conn = GetConnection())
+            {
+                return
+                conn.Query<TradeMeInteractionEvent>(
+                    query, new { startDate, endDate })
                     .ToList();
-        }
-        
-           
-
-        public int GetSoldToday()
-        {
-            var query = string.Format("{0}{1}",
-                                      _queryDateOffset,
-                                      "SELECT COUNT (*) FROM auction_sold (NOLOCK) WHERE sold_date>CONVERT(date, @dateNow) AND sold_date<@dateNow;");
-            return _db.Query<int>(query).First();
+            }
         }
 
-        public int GetNewToday()
+        public int GetSoldToday(DateTime startDate, DateTime endDate)
         {
-            var query = string.Format("{0}{1}",
-                                     _queryDateOffset,
-                                     "SELECT COUNT (*) FROM auction (NOLOCK) WHERE StartDate>CONVERT(date, @dateNow) AND StartDate<@dateNow;");
-            return _db.Query<int>(query).First();
+            startDate = OffSetDateTimeForDataWarehouse(startDate);
+            endDate = OffSetDateTimeForDataWarehouse(endDate);
+            var query = @"SELECT COUNT (*) FROM auction_sold (NOLOCK) WHERE sold_date>@startDate AND sold_date<@endDate;";
+
+            using (var conn = GetConnection())
+            {
+                return conn.Query<int>(query, new { startDate, endDate }).First();
+            }
+        }
+
+        public int GetNewToday(DateTime startDate, DateTime endDate)
+        {
+            startDate = OffSetDateTimeForDataWarehouse(startDate);
+            endDate = OffSetDateTimeForDataWarehouse(endDate);
+            var query = @"SELECT COUNT (*) FROM auction (NOLOCK) WHERE StartDate>@startDate AND StartDate<@endDate;";
+            using (var conn = GetConnection())
+            {
+                return conn.Query<int>(query, new { startDate, endDate }).First();
+            }
         }
     }
 }
