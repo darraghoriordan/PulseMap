@@ -2,7 +2,7 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 
 $(document).ready(() => {
-    var mapHelper = new PulseHubConnection();
+    var mapHelper = new PulseApiConnection();
     mapHelper.createMap();
     mapHelper.startEventsService();
 

@@ -8,7 +8,8 @@ namespace Pulse.Services
     public class TradeMeEventServiceFake : ITradeMeEventService
     {
         private readonly IGeoCoder _geocoder;
-        readonly Random _rnd = new Random();
+        readonly Random _rnd = new Random(100);
+        readonly Random _rnd2 = new Random(50);
 
         public TradeMeEventServiceFake(IGeoCoder geocoder)
         {
@@ -21,18 +22,19 @@ namespace Pulse.Services
             var selector = _rnd.Next(900, 1000);
             for (var i = 0; i <= selector; i++)
             {
-                list.Add(GetRandomStandaloneEvent());
+                list.Add(GetRandomStandaloneEvent(_rnd));
             }
 
             return list;
         }
+
         public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents()
         {
             var list = new List<TradeMeInteractionEvent>();
-            var selector = _rnd.Next(600, 800);
+            var selector = _rnd.Next(400, 600);
             for (var i = 0; i <= selector; i++)
             {
-                list.Add(GetRandomInteractionEvent());
+                list.Add(GetRandomInteractionEvent(_rnd));
             }
 
             return list;
@@ -41,10 +43,10 @@ namespace Pulse.Services
         public IEnumerable<TradeMeInteractionEvent> GetLatestCommentEvents()
         {
             var list = new List<TradeMeInteractionEvent>();
-            var selector = _rnd.Next(600, 800);
+            var selector = _rnd2.Next(600, 800);
             for (var i = 0; i <= selector; i++)
             {
-                list.Add(GetRandomInteractionEvent());
+                list.Add(GetRandomInteractionEvent(_rnd2));
             }
 
             return list;
@@ -67,16 +69,16 @@ namespace Pulse.Services
                   { "Wellington","Wellington City"},
                     { "Marlborough","Blenheim"}
         };
-        public TradeMeInteractionEvent GetRandomInteractionEvent()
+        public TradeMeInteractionEvent GetRandomInteractionEvent(Random rnd)
         {
             var now = DateTime.Now;
-            var locationSelector1 = _rnd.Next(0, _addressDictionary.Count);
-            var locationSelector2 = _rnd.Next(0, _addressDictionary.Count);
+            var locationSelector1 = rnd.Next(0, _addressDictionary.Count);
+            var locationSelector2 = rnd.Next(0, _addressDictionary.Count);
             var tmEvent = new TradeMeInteractionEvent()
             {
                 OccuredOn =
-                    new DateTime(now.Year, now.Month, now.Day, now.Hour, RandomlyOffsetMinutes(now.Minute),
-                        RandomlyOffsetSeconds(), RandomlyOffsetMilliseconds()),
+                    new DateTime(now.Year, now.Month, now.Day, now.Hour, RandomlyOffsetMinutes(now.Minute, rnd),
+                        RandomlyOffsetSeconds(rnd), RandomlyOffsetMilliseconds(rnd)),
                 StartRegion = _addressDictionary.ElementAt(locationSelector1).Key,
                 StartSuburb = _addressDictionary.ElementAt(locationSelector1).Value,
                 EndRegion  = _addressDictionary.ElementAt(locationSelector2).Key,
@@ -85,61 +87,61 @@ namespace Pulse.Services
 
             _geocoder.ApplyCoordinates(tmEvent);
 
-            tmEvent.StartLatitude = RandomlyOffsetCoordinate(tmEvent.StartLatitude);
-            tmEvent.StartLongitude = RandomlyOffsetCoordinate(tmEvent.StartLongitude);
+            tmEvent.StartLatitude = RandomlyOffsetCoordinate(tmEvent.StartLatitude, rnd);
+            tmEvent.StartLongitude = RandomlyOffsetCoordinate(tmEvent.StartLongitude, rnd);
 
-            tmEvent.EndLatitude = RandomlyOffsetCoordinate(tmEvent.EndLatitude);
-            tmEvent.EndLongitude = RandomlyOffsetCoordinate(tmEvent.EndLongitude);
+            tmEvent.EndLatitude = RandomlyOffsetCoordinate(tmEvent.EndLatitude, rnd);
+            tmEvent.EndLongitude = RandomlyOffsetCoordinate(tmEvent.EndLongitude, rnd);
 
             return tmEvent;
         }
-        public TradeMeStandaloneEvent GetRandomStandaloneEvent()
+        public TradeMeStandaloneEvent GetRandomStandaloneEvent(Random rnd)
         {
             var now = DateTime.Now;
-            var selector = _rnd.Next(0, _addressDictionary.Count);
+            var selector = rnd.Next(0, _addressDictionary.Count);
             var tmEvent = new TradeMeStandaloneEvent
             {
                 OccuredOn =
-                    new DateTime(now.Year, now.Month, now.Day, now.Hour, RandomlyOffsetMinutes(now.Minute),
-                        RandomlyOffsetSeconds(), RandomlyOffsetMilliseconds()),
+                    new DateTime(now.Year, now.Month, now.Day, now.Hour, RandomlyOffsetMinutes(now.Minute, rnd),
+                        RandomlyOffsetSeconds(rnd), RandomlyOffsetMilliseconds(rnd)),
                 Region = _addressDictionary.ElementAt(selector).Key,
                 Suburb = _addressDictionary.ElementAt(selector).Value
             };
 
             _geocoder.ApplyCoordinates(tmEvent);
 
-            tmEvent.Latitude = RandomlyOffsetCoordinate(tmEvent.Latitude);
-            tmEvent.Longitude = RandomlyOffsetCoordinate(tmEvent.Longitude);
+            tmEvent.Latitude = RandomlyOffsetCoordinate(tmEvent.Latitude, rnd);
+            tmEvent.Longitude = RandomlyOffsetCoordinate(tmEvent.Longitude, rnd);
 
             return tmEvent;
         }
 
-        public int RandomlyOffsetMinutes(int nowMinute)
+        public int RandomlyOffsetMinutes(int nowMinute, Random rnd)
         {
             int maximum = nowMinute;
             int minimum = nowMinute < 5 ? 0 : nowMinute - 5;
 
-            return _rnd.Next(minimum, maximum);
+            return rnd.Next(minimum, maximum);
         }
 
-        public int RandomlyOffsetSeconds()
+        public int RandomlyOffsetSeconds(Random rnd)
         {
             int maximum = 60;
 
-            return _rnd.Next(maximum);
+            return rnd.Next(maximum);
         }
-        public int RandomlyOffsetMilliseconds()
+        public int RandomlyOffsetMilliseconds(Random rnd)
         {
             int maximum = 999;
 
-            return _rnd.Next(maximum);
+            return rnd.Next(maximum);
         }
-        public double RandomlyOffsetCoordinate(double number)
+        public double RandomlyOffsetCoordinate(double number, Random rnd)
         {
             double minimum = number - .3;
             double maximum = number + .3;
 
-            return _rnd.NextDouble() * (maximum - minimum) + minimum;
+            return rnd.NextDouble() * (maximum - minimum) + minimum;
         }
     }
 }

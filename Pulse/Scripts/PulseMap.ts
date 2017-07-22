@@ -314,5 +314,7 @@
             }
         }
     }
-
 }
+
+// ReSharper disable once InconsistentNaming
+declare function MarkerWithLabel(opts: any): void;

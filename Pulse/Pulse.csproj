@@ -219,21 +219,22 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\ListingActivityController.cs" />
     <Compile Include="Dapper\IMapEventRepository.cs" />
     <Compile Include="Dapper\MapEventRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201505280628086_init-database.cs" />
-    <Compile Include="Migrations\201505280628086_init-database.Designer.cs">
+    <Compile Include="Models\Migrations\201505280628086_init-database.cs" />
+    <Compile Include="Models\Migrations\201505280628086_init-database.Designer.cs">
       <DependentUpon>201505280628086_init-database.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201505280928292_latest-stuff.cs" />
-    <Compile Include="Migrations\201505280928292_latest-stuff.Designer.cs">
+    <Compile Include="Models\Migrations\201505280928292_latest-stuff.cs" />
+    <Compile Include="Models\Migrations\201505280928292_latest-stuff.Designer.cs">
       <DependentUpon>201505280928292_latest-stuff.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\GoogleGeoCodeResponse.cs" />
     <Compile Include="Models\ILocalityDbContext.cs" />
@@ -336,10 +337,12 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <TypeScriptCompile Include="Scripts\PulseApiConnection.ts" />
     <TypeScriptCompile Include="Scripts\PulseHubConnection.ts" />
     <TypeScriptCompile Include="Scripts\PulseMap.ts" />
     <TypeScriptCompile Include="Scripts\typings\google.maps.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\signalr\signalr.d.ts" />
   </ItemGroup>
   <ItemGroup>
@@ -350,10 +353,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201505280628086_init-database.resx">
+    <EmbeddedResource Include="Models\Migrations\201505280628086_init-database.resx">
       <DependentUpon>201505280628086_init-database.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201505280928292_latest-stuff.resx">
+    <EmbeddedResource Include="Models\Migrations\201505280928292_latest-stuff.resx">
       <DependentUpon>201505280928292_latest-stuff.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
