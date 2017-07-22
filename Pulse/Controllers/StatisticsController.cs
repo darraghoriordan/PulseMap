@@ -1,4 +1,5 @@
 ﻿using Pulse.Services;
+using System;
 using System.Web.Http;
 
 namespace Pulse.Controllers
@@ -14,17 +15,17 @@ namespace Pulse.Controllers
 
         [Route("newlistings")]
         [HttpGet]
-        public int GetStatsNewToday()
+        public int GetStatsNewToday(DateTime startDate, DateTime endDate)
         {
-            var events = _tradeMeEventService.GetStatsNewToday();
+            var events = _tradeMeEventService.GetStatsNewToday(startDate, endDate);
             return events;
         }
 
         [Route("soldlistings")]
         [HttpGet]
-        public int GetStatsSoldToday()
+        public int GetStatsSoldToday(DateTime startDate, DateTime endDate)
         {
-            var events = _tradeMeEventService.GetStatsSoldToday();
+            var events = _tradeMeEventService.GetStatsSoldToday(startDate, endDate);
             return events;
         }
     }

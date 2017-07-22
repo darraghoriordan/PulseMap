@@ -1,6 +1,6 @@
 var StandAloneEvent = (function () {
     function StandAloneEvent(jsonObject) {
-        this.OccuredOn = jsonObject.OccuredOn;
+        this.OccuredOn = moment(jsonObject.OccuredOn);
         this.Latitude = jsonObject.Latitude;
         this.Longitude = jsonObject.Longitude;
         this.Region = jsonObject.Region;
@@ -16,7 +16,7 @@ var InteractionEvent = (function () {
         this.EndRegion = jsonData.EndRegion;
         this.EndSuburb = jsonData.EndSuburb;
         this.CategoryId = jsonData.CategoryId;
-        this.OccuredOn = jsonData.OccuredOn;
+        this.OccuredOn = moment(jsonData.OccuredOn);
         this.StartLatitude = jsonData.StartLatitude;
         this.StartLongitude = jsonData.StartLongitude;
         this.EndLatitude = jsonData.EndLatitude;
@@ -26,18 +26,13 @@ var InteractionEvent = (function () {
 }());
 var PulseApiConnection = (function () {
     function PulseApiConnection() {
-        var _this = this;
-        this.newListings = 0;
-        this.soldListings = 0;
         this.pulseMap = new PulseMap();
-        this.currentTime = moment();
-        this.nextUpdateDue = this.currentTime; //set this to now for the first run
         this.standAloneEvents = new Array();
         this.commentEvents = new Array();
         this.interactionEvents = new Array();
         this.newListings = 0;
         this.soldListings = 0;
-        setInterval(function () { _this.setTime(); }, 200);
+        this.nextUpdateDue = moment('2015-10-15');
     }
     PulseApiConnection.prototype.startEventsService = function () {
         var _this = this;
@@ -46,47 +41,53 @@ var PulseApiConnection = (function () {
     PulseApiConnection.prototype.createMap = function () {
         this.pulseMap.createMap();
     };
-    PulseApiConnection.prototype.getNewEvents = function () {
+    PulseApiConnection.prototype.getNewEvents = function (startDate, endDate) {
         var currentInstance = this;
-        $.get("/api/events/standalone", function (data) {
+        var sdString = startDate.toISOString();
+        var edString = endDate.toISOString();
+        $.get("/api/events/standalone", { startDate: sdString, endDate: edString }, function (data) {
             if (data)
                 currentInstance.standAloneEvents = $.map(data, function (x) {
                     return new StandAloneEvent(x);
                 });
         });
-        $.get("/api/events/interaction", function (idata) {
+        $.get("/api/events/interaction", { startDate: sdString, endDate: edString }, function (idata) {
             if (idata)
                 currentInstance.interactionEvents = $.map(idata, function (x) {
                     return new InteractionEvent(x);
                 });
         });
-        $.get("/api/events/comments", function (cdata) {
+        $.get("/api/events/comments", { startDate: sdString, endDate: edString }, function (cdata) {
             if (cdata)
                 currentInstance.commentEvents = $.map(cdata, function (x) {
                     return new InteractionEvent(x);
                 });
         });
-        $.get("/api/statistics/newlistings", function (cdata) {
+        $.get("/api/statistics/newlistings", { startDate: sdString, endDate: edString }, function (cdata) {
             if (cdata)
                 currentInstance.newListings = cdata;
         });
-        $.get("/api/statistics/soldListings", function (cdata) {
+        $.get("/api/statistics/soldListings", { startDate: sdString, endDate: edString }, function (cdata) {
             if (cdata)
                 currentInstance.soldListings = cdata;
         });
     };
     PulseApiConnection.prototype.updateEvents = function () {
+        this.setTime();
+        var offsetTime = moment(this.currentTime).subtract(5, "s");
+        var c = this.currentTime.toISOString();
+        var nu = this.nextUpdateDue.toISOString();
+        var ot = offsetTime.toISOString();
         //do we need new data?
         if (this.currentTime.isSameOrAfter(this.nextUpdateDue)) {
-            this.getNewEvents();
+            this.getNewEvents(offsetTime, this.currentTime);
             // set when last update occured
-            this.nextUpdateDue = moment().add(5, 'minutes');
+            this.nextUpdateDue = moment(this.currentTime).add(40, "s");
         }
         // this.pulseMap.clearUsedLines();
         //  this.pulseMap.clearUsedMarkers();
         // this is kind of broken in that we are dependent on getting 5 mins from api too. It works ok but only cause we control
         // both ends. Would be better to have the api query configurable to match the offsets.
-        var offsetTime = this.currentTime.subtract(5, 'minutes');
         for (var i = 0; i < this.standAloneEvents.length; i++) {
             var event_1 = this.standAloneEvents[i];
             if (offsetTime.isSameOrAfter(event_1.OccuredOn)) {

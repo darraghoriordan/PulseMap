@@ -57,22 +57,22 @@ namespace Pulse.Services
 
                         // set the next update to be sometime after now
                         _nextTradeMeUpdate = DateTime.Now.AddMinutes(_settingsService.EventStoreUpdateInterval.Minutes);
-
+                        var now = DateTime.Now;
                         // clear old events and grab the last 5 mins of trademe activity
                         _standaloneEvents.Clear();
-                        _standaloneEvents.AddRange(_tradeMeEventService.GetLatestStandaloneEvents().Where(e => e.OccuredOn > DateTime.Now.Add(-_settingsService.EventStoreUpdateInterval)));
+                        _standaloneEvents.AddRange(_tradeMeEventService.GetLatestStandaloneEvents(now, _nextTradeMeUpdate).Where(e => e.OccuredOn > DateTime.Now.Add(-_settingsService.EventStoreUpdateInterval)));
 
                         // clear old events and grab the last 5 mins of trademe activity
                         _interactionEvents.Clear();
-                        _interactionEvents.AddRange(_tradeMeEventService.GetLatestInteractionEvents().Where(e => e.OccuredOn > DateTime.Now.Add(-_settingsService.EventStoreUpdateInterval)));
+                        _interactionEvents.AddRange(_tradeMeEventService.GetLatestInteractionEvents(now, _nextTradeMeUpdate).Where(e => e.OccuredOn > DateTime.Now.Add(-_settingsService.EventStoreUpdateInterval)));
                         
                         // same for comments
                         _commentEvents.Clear();
-                        _commentEvents.AddRange(_tradeMeEventService.GetLatestCommentEvents().Where(e => e.OccuredOn > DateTime.Now.Add(-_settingsService.EventStoreUpdateInterval)));
+                        _commentEvents.AddRange(_tradeMeEventService.GetLatestCommentEvents(now, _nextTradeMeUpdate).Where(e => e.OccuredOn > DateTime.Now.Add(-_settingsService.EventStoreUpdateInterval)));
                         
                         // refresh these every time to correct any possible 'drift' :)
-                        _statsSoldToday = _tradeMeEventService.GetStatsSoldToday();
-                        _statsNewToday = _tradeMeEventService.GetStatsNewToday();
+                        _statsSoldToday = _tradeMeEventService.GetStatsSoldToday(now, _nextTradeMeUpdate);
+                        _statsNewToday = _tradeMeEventService.GetStatsNewToday(now, _nextTradeMeUpdate);
 
                     }
                     // update the offset time for displaying results to clients

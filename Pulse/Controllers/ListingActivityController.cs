@@ -1,4 +1,5 @@
 ﻿using Pulse.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -16,26 +17,26 @@ namespace Pulse.Controllers
 
         [Route("standalone")]
         [HttpGet]
-        public IEnumerable<Models.TradeMeStandaloneEvent> GetStandaloneEvents()
+        public IEnumerable<Models.TradeMeStandaloneEvent> GetStandaloneEvents(DateTime startDate, DateTime endDate)
         {
-            var events = _tradeMeEventService.GetLatestStandaloneEvents().OrderBy(x=> x.OccuredOn);
+            var events = _tradeMeEventService.GetLatestStandaloneEvents(startDate, endDate).OrderBy(x=> x.OccuredOn);
             return events;
         }
 
         [Route("interaction")]
         [HttpGet]
-        public IEnumerable<Models.TradeMeInteractionEvent> GetInteractiveEvents()
+        public IEnumerable<Models.TradeMeInteractionEvent> GetInteractiveEvents(DateTime startDate, DateTime endDate)
         {
-            var events = _tradeMeEventService.GetLatestInteractionEvents().OrderBy(x => x.OccuredOn);
+            var events = _tradeMeEventService.GetLatestInteractionEvents(startDate, endDate).OrderBy(x => x.OccuredOn);
             var s = events.Count();
             return events;
         }
 
         [Route("comments")]
         [HttpGet]
-        public IEnumerable<Models.TradeMeInteractionEvent> GetCommentEvents()
+        public IEnumerable<Models.TradeMeInteractionEvent> GetCommentEvents(DateTime startDate, DateTime endDate)
         {
-            var events = _tradeMeEventService.GetLatestCommentEvents().OrderBy(x => x.OccuredOn);
+            var events = _tradeMeEventService.GetLatestCommentEvents(startDate, endDate).OrderBy(x => x.OccuredOn);
             var s = events.Count();
             return events;
         }

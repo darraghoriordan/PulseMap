@@ -2,6 +2,7 @@
 using System.Linq;
 using Pulse.Dapper;
 using Pulse.Models;
+using System;
 
 namespace Pulse.Services
 {
@@ -18,29 +19,29 @@ namespace Pulse.Services
             _eventOffsetService = eventOffsetService;
         }
 
-        public IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents()
+        public IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents(DateTime startDate, DateTime endDate)
         {
-            var listTmEvent = _mapEventRepository.GetSingleMapEvents();
+            var listTmEvent = _mapEventRepository.GetSingleMapEvents(startDate, endDate);
             return listTmEvent.Select(GetStandaloneEvent).ToList();
         }
-        public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents()
+        public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents(DateTime startDate, DateTime endDate)
         {
-            var listTmEvent = _mapEventRepository.GetInteractionMapEvents();
+            var listTmEvent = _mapEventRepository.GetInteractionMapEvents(startDate, endDate);
             return listTmEvent.Select(GetInteractionEvent).ToList();
         }
-        public IEnumerable<TradeMeInteractionEvent> GetLatestCommentEvents()
+        public IEnumerable<TradeMeInteractionEvent> GetLatestCommentEvents(DateTime startDate, DateTime endDate)
         {
-            var listTmEvent = _mapEventRepository.GetComments();
+            var listTmEvent = _mapEventRepository.GetComments(startDate, endDate);
             return listTmEvent.Select(GetInteractionEvent).ToList();
         }
-        public int GetStatsSoldToday()
+        public int GetStatsSoldToday(DateTime startDate, DateTime endDate)
         {
-            return _mapEventRepository.GetSoldToday();
+            return _mapEventRepository.GetSoldToday(startDate, endDate);
         }
 
-        public int GetStatsNewToday()
+        public int GetStatsNewToday(DateTime startDate, DateTime endDate)
         {
-            return _mapEventRepository.GetNewToday();
+            return _mapEventRepository.GetNewToday(startDate, endDate);
         }
 
         public TradeMeInteractionEvent GetInteractionEvent(TradeMeInteractionEvent myEvent)

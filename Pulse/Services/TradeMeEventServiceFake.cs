@@ -16,47 +16,53 @@ namespace Pulse.Services
             _geocoder = geocoder;
         }
 
-        public IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents()
+        public IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents(DateTime startDate, DateTime endDate)
         {
-            var list = new List<TradeMeStandaloneEvent>();
-            var selector = _rnd.Next(900, 1000);
+           var list = new List<TradeMeStandaloneEvent>();
+            int selector= GetSelector(_rnd, startDate, endDate);
             for (var i = 0; i <= selector; i++)
             {
-                list.Add(GetRandomStandaloneEvent(_rnd));
+                list.Add(GetRandomStandaloneEvent(_rnd, startDate, endDate));
             }
 
             return list;
         }
 
-        public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents()
+        private int GetSelector(Random rnd, DateTime startDate, DateTime endDate)
         {
-            var list = new List<TradeMeInteractionEvent>();
-            var selector = _rnd.Next(400, 600);
-            for (var i = 0; i <= selector; i++)
-            {
-                list.Add(GetRandomInteractionEvent(_rnd));
-            }
-
-            return list;
+            TimeSpan timeSpan = endDate - startDate;            
+           return rnd.Next(timeSpan.Seconds, timeSpan.Seconds *2);
         }
-        
-        public IEnumerable<TradeMeInteractionEvent> GetLatestCommentEvents()
+
+        public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents(DateTime startDate, DateTime endDate)
         {
             var list = new List<TradeMeInteractionEvent>();
-            var selector = _rnd2.Next(600, 800);
+            int selector = GetSelector(_rnd, startDate, endDate);
             for (var i = 0; i <= selector; i++)
             {
-                list.Add(GetRandomInteractionEvent(_rnd2));
+                list.Add(GetRandomInteractionEvent(_rnd, startDate, endDate));
             }
 
             return list;
         }
-        public int GetStatsSoldToday()
+
+        public IEnumerable<TradeMeInteractionEvent> GetLatestCommentEvents(DateTime startDate, DateTime endDate)
+        {
+            var list = new List<TradeMeInteractionEvent>();
+            int selector = GetSelector(_rnd2, startDate, endDate);
+            for (var i = 0; i <= selector; i++)
+            {
+                list.Add(GetRandomInteractionEvent(_rnd2, startDate, endDate));
+            }
+
+            return list;
+        }
+        public int GetStatsSoldToday(DateTime startDate, DateTime endDate)
         {
             return 10000;
         }
 
-        public int GetStatsNewToday()
+        public int GetStatsNewToday(DateTime startDate, DateTime endDate)
         {
             return 10000;
         }
@@ -69,19 +75,31 @@ namespace Pulse.Services
                   { "Wellington","Wellington City"},
                     { "Marlborough","Blenheim"}
         };
-        public TradeMeInteractionEvent GetRandomInteractionEvent(Random rnd)
+
+        protected DateTime GetRandomDate(Random rnd, DateTime startDate, DateTime endDate)
         {
             var now = DateTime.Now;
+            TimeSpan timeSpan = endDate - startDate;
+            if (timeSpan.TotalSeconds <= 0)
+            {
+                throw new Exception("The end time must be greater than the start time.");
+            }
+
+            TimeSpan newSpan = new TimeSpan(0, 0, 0, rnd.Next(0, (int)timeSpan.TotalSeconds));
+            DateTime newDate = startDate + newSpan;
+            return newDate;
+        }
+        public TradeMeInteractionEvent GetRandomInteractionEvent(Random rnd, DateTime startDate, DateTime endDate)
+        {
+
             var locationSelector1 = rnd.Next(0, _addressDictionary.Count);
             var locationSelector2 = rnd.Next(0, _addressDictionary.Count);
             var tmEvent = new TradeMeInteractionEvent()
             {
-                OccuredOn =
-                    new DateTime(now.Year, now.Month, now.Day, now.Hour, RandomlyOffsetMinutes(now.Minute, rnd),
-                        RandomlyOffsetSeconds(rnd), RandomlyOffsetMilliseconds(rnd)),
+                OccuredOn = GetRandomDate(rnd, startDate, endDate),
                 StartRegion = _addressDictionary.ElementAt(locationSelector1).Key,
                 StartSuburb = _addressDictionary.ElementAt(locationSelector1).Value,
-                EndRegion  = _addressDictionary.ElementAt(locationSelector2).Key,
+                EndRegion = _addressDictionary.ElementAt(locationSelector2).Key,
                 EndSuburb = _addressDictionary.ElementAt(locationSelector2).Value
             };
 
@@ -95,15 +113,13 @@ namespace Pulse.Services
 
             return tmEvent;
         }
-        public TradeMeStandaloneEvent GetRandomStandaloneEvent(Random rnd)
+        public TradeMeStandaloneEvent GetRandomStandaloneEvent(Random rnd, DateTime startDate, DateTime endDate)
         {
             var now = DateTime.Now;
             var selector = rnd.Next(0, _addressDictionary.Count);
             var tmEvent = new TradeMeStandaloneEvent
             {
-                OccuredOn =
-                    new DateTime(now.Year, now.Month, now.Day, now.Hour, RandomlyOffsetMinutes(now.Minute, rnd),
-                        RandomlyOffsetSeconds(rnd), RandomlyOffsetMilliseconds(rnd)),
+                OccuredOn = GetRandomDate(rnd, startDate, endDate),
                 Region = _addressDictionary.ElementAt(selector).Key,
                 Suburb = _addressDictionary.ElementAt(selector).Value
             };
