@@ -18,8 +18,19 @@ namespace Pulse.Dapper
             return input.AddDays(-1);
         }
 
+        private bool DateTimeDifferenceIsSane(DateTime startDate, DateTime endDate)
+        {
+            if (endDate.Subtract(startDate).TotalMinutes >= 30){
+                return false;
+            }
+            return true;
+        }
         public IList<TradeMeStandaloneEvent> GetSingleMapEvents(DateTime startDate, DateTime endDate)
         {
+            if (!DateTimeDifferenceIsSane(startDate, endDate))
+            {
+                return new List<TradeMeStandaloneEvent>();
+            }
             startDate = OffSetDateTimeForDataWarehouse(startDate);
             endDate = OffSetDateTimeForDataWarehouse(endDate);
             using (var conn = GetConnection())
@@ -35,6 +46,11 @@ namespace Pulse.Dapper
 
         public IList<TradeMeInteractionEvent> GetInteractionMapEvents(DateTime startDate, DateTime endDate)
         {
+            if (!DateTimeDifferenceIsSane(startDate, endDate))
+            {
+                return new List<TradeMeInteractionEvent>();
+            }
+
             startDate = OffSetDateTimeForDataWarehouse(startDate);
             endDate = OffSetDateTimeForDataWarehouse(endDate);
             using (var conn = GetConnection())
@@ -52,6 +68,11 @@ namespace Pulse.Dapper
         }
         public IList<TradeMeInteractionEvent> GetComments(DateTime startDate, DateTime endDate)
         {
+            if (!DateTimeDifferenceIsSane(startDate, endDate))
+            {
+                return new List<TradeMeInteractionEvent>();
+            }
+
             startDate = OffSetDateTimeForDataWarehouse(startDate);
             endDate = OffSetDateTimeForDataWarehouse(endDate);
             var query = @"
@@ -88,6 +109,10 @@ SELECT a.categoryId as CategoryId, vws.response_date as OccuredOn ,r1.RegionName
 
         public int GetSoldToday(DateTime startDate, DateTime endDate)
         {
+            if (!DateTimeDifferenceIsSane(startDate, endDate))
+            {
+                return 0;
+            }
             startDate = OffSetDateTimeForDataWarehouse(startDate);
             endDate = OffSetDateTimeForDataWarehouse(endDate);
             var query = @"SELECT COUNT (*) FROM auction_sold (NOLOCK) WHERE sold_date>@startDate AND sold_date<@endDate;";
@@ -100,6 +125,11 @@ SELECT a.categoryId as CategoryId, vws.response_date as OccuredOn ,r1.RegionName
 
         public int GetNewToday(DateTime startDate, DateTime endDate)
         {
+            if (!DateTimeDifferenceIsSane(startDate, endDate))
+            {
+                return 0;
+            }
+
             startDate = OffSetDateTimeForDataWarehouse(startDate);
             endDate = OffSetDateTimeForDataWarehouse(endDate);
             var query = @"SELECT COUNT (*) FROM auction (NOLOCK) WHERE StartDate>@startDate AND StartDate<@endDate;";
