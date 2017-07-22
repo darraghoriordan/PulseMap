@@ -1,5 +1,3 @@
-using Pulse.Services;
-
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Pulse.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(Pulse.App_Start.NinjectWebCommon), "Stop")]
 
@@ -12,6 +10,8 @@ namespace Pulse.App_Start
 
     using Ninject;
     using Ninject.Web.Common;
+    using System.Web.Http;
+    using Ninject.Web.WebApi;
 
     public static class NinjectWebCommon 
     {
@@ -24,11 +24,8 @@ namespace Pulse.App_Start
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
-           
-            bootstrapper.Initialize(CreateKernel);
-           
-           var start = bootstrapper.Kernel.Get<IPulseEventService>();
 
+            bootstrapper.Initialize(CreateKernel);
         }
         
         /// <summary>
@@ -52,6 +49,7 @@ namespace Pulse.App_Start
                 kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
                 RegisterServices(kernel);
+
                 return kernel;
             }
             catch
@@ -67,11 +65,13 @@ namespace Pulse.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Load(new NinjectModules.MainNinjectModule());
-            // use the following for testing
 
+            kernel.Load(new NinjectModules.MainNinjectModule());
+                       // use the following for testing
+           
             kernel.Load(new NinjectModules.FakedNinjectModule());
 
+            GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
         }        
     }
 }
