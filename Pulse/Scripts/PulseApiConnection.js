@@ -37,7 +37,7 @@ var PulseApiConnection = (function () {
     }
     PulseApiConnection.prototype.startEventsService = function () {
         var _this = this;
-        setInterval(function () { _this.updateEvents(); }, 200);
+        setInterval(function () { _this.updateEvents(); }, 500);
     };
     PulseApiConnection.prototype.createMap = function () {
         this.pulseMap.createMap();

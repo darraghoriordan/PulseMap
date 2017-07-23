@@ -17,6 +17,5 @@ namespace Pulse.Controllers
             ViewBag.GoogleMapsUrl = _settingsService.GoogleMapsUrl;
             return View();
         }
-
     }
 }

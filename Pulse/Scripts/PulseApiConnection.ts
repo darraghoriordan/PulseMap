@@ -61,7 +61,7 @@ class PulseApiConnection {
         this.nextUpdateDue = moment('2015-10-15')
     }
     startEventsService() {
-        setInterval(() => { this.updateEvents(); }, 200);
+        setInterval(() => { this.updateEvents(); }, 500);
     }
 
     createMap() {
