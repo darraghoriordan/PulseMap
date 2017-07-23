@@ -1,5 +1,7 @@
 ﻿using Pulse.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 
 namespace Pulse.Controllers
@@ -30,9 +32,9 @@ namespace Pulse.Controllers
         }
         [Route("TotalDealerGms")]
         [HttpGet]
-        public Models.StatModel GetStatsTotalDealerGms(DateTime startDate, DateTime endDate)
+        public IEnumerable<Models.StatModel> GetStatsTotalDealerGms(DateTime startDate, DateTime endDate)
         {
-            var events = _tradeMeEventService.GetStatsTotalDealerGms(startDate,endDate);
+            var events = _tradeMeEventService.GetLatestStatsTotalDealerGms(startDate,endDate).OrderBy(x => x.OccuredOn);
             return events;
         }
     }

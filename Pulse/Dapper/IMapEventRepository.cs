@@ -11,6 +11,6 @@ namespace Pulse.Dapper
         IList<TradeMeInteractionEvent> GetComments(DateTime startDate, DateTime endDate);
         int GetSoldToday(DateTime startDate, DateTime endDate);
         int GetNewToday(DateTime startDate, DateTime endDate);
-        Models.StatModel GetTotalDealerGms(DateTime startDate, DateTime endDate);
+        IList<StatModel> GetLatestTotalDealerGms(DateTime startDate, DateTime endDate);
     }
 }

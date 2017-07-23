@@ -43,9 +43,9 @@ namespace Pulse.Services
         {
             return _mapEventRepository.GetNewToday(startDate, endDate);
         }
-        public Models.StatModel GetStatsTotalDealerGms(DateTime startDate, DateTime endDate)
+        public IEnumerable<StatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate)
         {
-            return _mapEventRepository.GetTotalDealerGms(startDate, endDate);
+            return _mapEventRepository.GetLatestTotalDealerGms(startDate, endDate);
         }
         public TradeMeInteractionEvent GetInteractionEvent(TradeMeInteractionEvent myEvent)
         {

@@ -11,6 +11,6 @@ namespace Pulse.Services
         IEnumerable<TradeMeInteractionEvent> GetLatestCommentEvents(DateTime startDate, DateTime endDate);
         int GetStatsSoldToday(DateTime startDate, DateTime endDate);
         int GetStatsNewToday(DateTime startDate, DateTime endDate);
-        Models.StatModel GetStatsTotalDealerGms(DateTime startDate, DateTime endDate);
+        IEnumerable<StatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate);
     }
 }

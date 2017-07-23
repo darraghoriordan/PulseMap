@@ -87,8 +87,6 @@ var PulseApiConnection = (function () {
         }
         // this.pulseMap.clearUsedLines();
         //  this.pulseMap.clearUsedMarkers();
-        // this is kind of broken in that we are dependent on getting 5 mins from api too. It works ok but only cause we control
-        // both ends. Would be better to have the api query configurable to match the offsets.
         for (var i = 0; i < this.standAloneEvents.length; i++) {
             var event_1 = this.standAloneEvents[i];
             if (offsetTime.isSameOrAfter(event_1.OccuredOn)) {

@@ -1,7 +1,7 @@
 var StatModel = (function () {
     function StatModel(jsonObject) {
         this.StartStat = jsonObject.StartStat;
-        this.EndStat = jsonObject.EndStat;
+        this.OccuredOn = moment(jsonObject.OccuredOn);
     }
     return StatModel;
 }());
@@ -9,6 +9,7 @@ var StatCounter = (function () {
     function StatCounter() {
         this.nextUpdateDue = moment('2015-10-15');
         this.totalDealerElement = $('#totalDealerGmsStat .statsValueText');
+        this.totalDealerGmsStats = new Array();
         this.numberFormat = new Intl.NumberFormat('en-NZ', {
             style: 'currency',
             currency: 'NZD',
@@ -23,10 +24,11 @@ var StatCounter = (function () {
         var currentInstance = this;
         var edString = endDate.toISOString();
         var sdString = startDate.toISOString();
-        $.get("/api/statistics/totaldealergms", { startDate: sdString, endDate: edString }, function (data) {
-            if (data) {
-                currentInstance.totalDealerGms = new StatModel(data);
-            }
+        $.get("/api/statistics/totaldealergms", { startDate: sdString, endDate: edString }, function (cdata) {
+            if (cdata)
+                currentInstance.totalDealerGmsStats = $.map(cdata, function (x) {
+                    return new StatModel(x);
+                });
         });
     };
     StatCounter.prototype.updateEvents = function () {
@@ -37,7 +39,16 @@ var StatCounter = (function () {
             // set when last update occured
             this.nextUpdateDue = moment(this.currentTime).add(5, "m");
         }
-        this.totalDealerElement.text(this.numberFormat.format(this.getCurrentGms(this.currentTime, this.nextUpdateDue, this.totalDealerGms)));
+        for (var i = 0; i < this.totalDealerGmsStats.length; i++) {
+            var event_1 = this.totalDealerGmsStats[i];
+            var offset = offsetTime.toISOString();
+            var occ = event_1.OccuredOn.toISOString();
+            if (offsetTime.isSameOrAfter(event_1.OccuredOn)) {
+                this.totalDealerElement.text(this.numberFormat.format(event_1.StartStat));
+                this.totalDealerGmsStats.splice(i, 1);
+            }
+        }
+        // this.totalDealerElement.text(this.numberFormat.format(this.getCurrentGms(this.currentTime, this.nextUpdateDue, this.totalDealerGms)));
     };
     StatCounter.prototype.getCurrentGms = function (startDate, endDate, stat) {
         var timeDifference = endDate.diff(startDate, "s");

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Pulse.Models;
+using System.Threading;
 
 namespace Pulse.Services
 {
@@ -18,8 +19,8 @@ namespace Pulse.Services
 
         public IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents(DateTime startDate, DateTime endDate)
         {
-           var list = new List<TradeMeStandaloneEvent>();
-            int selector= GetSelector(_rnd, startDate, endDate);
+            var list = new List<TradeMeStandaloneEvent>();
+            int selector = GetSelector(_rnd, startDate, endDate);
             for (var i = 0; i <= selector; i++)
             {
                 list.Add(GetRandomStandaloneEvent(_rnd, startDate, endDate));
@@ -30,8 +31,8 @@ namespace Pulse.Services
 
         private int GetSelector(Random rnd, DateTime startDate, DateTime endDate)
         {
-            TimeSpan timeSpan = endDate - startDate;            
-           return rnd.Next((int)timeSpan.TotalSeconds, (int)(timeSpan.TotalSeconds * 2));
+            TimeSpan timeSpan = endDate - startDate;
+            return rnd.Next((int)timeSpan.TotalSeconds, (int)(timeSpan.TotalSeconds * 2));
         }
 
         public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents(DateTime startDate, DateTime endDate)
@@ -58,10 +59,27 @@ namespace Pulse.Services
             return list;
         }
 
-        public Models.StatModel GetStatsTotalDealerGms(DateTime startDate, DateTime endDate)
+        public IEnumerable<StatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate)
         {
-            return new StatModel { StartStat = 10000, EndStat = 10000 + _rnd.Next() };
+            var list = new List<StatModel>();
+            int selector = GetSelector(_rnd2, startDate, endDate);
+            list.Add(GetRandomStatEvent(_rnd2, startDate, endDate));
+            for (var i = 0; i <= selector; i++)
+            {
+                list.Add(GetRandomStatEvent(_rnd2, startDate, endDate));
+            }
+            var statVal = 100000;
+            foreach (var s in list.OrderBy(x => x.OccuredOn))
+            {
+                s.StartStat = statVal;
+                statVal += _rnd2.Next(1, 1000);
+            }
+
+            return list;
         }
+
+
+
         public int GetStatsSoldToday(DateTime startDate, DateTime endDate)
         {
             return 10000;
@@ -136,7 +154,15 @@ namespace Pulse.Services
 
             return tmEvent;
         }
+        private StatModel GetRandomStatEvent(Random rnd2, DateTime startDate, DateTime endDate)
+        {
+            var stat = new StatModel()
+            {
+                OccuredOn = GetRandomDate(rnd2, startDate, endDate)
+            };
 
+            return stat;
+        }
         public int RandomlyOffsetMinutes(int nowMinute, Random rnd)
         {
             int maximum = nowMinute;
@@ -164,7 +190,5 @@ namespace Pulse.Services
 
             return rnd.NextDouble() * (maximum - minimum) + minimum;
         }
-
-
     }
 }

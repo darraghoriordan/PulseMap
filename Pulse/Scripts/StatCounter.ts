@@ -1,15 +1,15 @@
 ﻿class StatModel {
     constructor(jsonObject: any) {
         this.StartStat = jsonObject.StartStat;
-        this.EndStat = jsonObject.EndStat;
+        this.OccuredOn = moment(jsonObject.OccuredOn);
     }
    
     public StartStat: number
-    public EndStat: number
+    public OccuredOn: moment.Moment
 }
 
 class StatCounter {
-    totalDealerGms: StatModel;
+    totalDealerGmsStats: Array<StatModel>;
     totalDealerElement: JQuery;
     currentTime: moment.Moment;
     nextUpdateDue: moment.Moment;
@@ -18,7 +18,7 @@ class StatCounter {
         this.nextUpdateDue = moment('2015-10-15');
       
         this.totalDealerElement = $('#totalDealerGmsStat .statsValueText');
-
+        this.totalDealerGmsStats = new Array<StatModel>();
 
         this.numberFormat = new Intl.NumberFormat('en-NZ', {
             style: 'currency',
@@ -38,10 +38,12 @@ class StatCounter {
 
         $.get(
             "/api/statistics/totaldealergms", { startDate: sdString, endDate: edString },
-            function (data) {
-                if (data) {
-                    currentInstance.totalDealerGms = new StatModel(data);
-                }
+            function (cdata) {
+
+                if (cdata)
+                    currentInstance.totalDealerGmsStats = $.map(cdata, (x) => {
+                        return new StatModel(x);
+                    });
             }
         );
     }
@@ -49,13 +51,25 @@ class StatCounter {
     updateEvents() {
         this.setTime();     
         let offsetTime = moment(this.currentTime).subtract(5, "m");
+
         if (this.currentTime.isSameOrAfter(this.nextUpdateDue)) {
             this.getNewEvents(offsetTime, this.currentTime);
             // set when last update occured
             this.nextUpdateDue = moment(this.currentTime).add(5, "m");
         }
 
-        this.totalDealerElement.text(this.numberFormat.format( this.getCurrentGms(this.currentTime, this.nextUpdateDue, this.totalDealerGms)));
+        for (var i = 0; i < this.totalDealerGmsStats.length; i++) {
+            let event = this.totalDealerGmsStats[i];
+            let offset = offsetTime.toISOString();
+            let occ = event.OccuredOn.toISOString();
+            if (offsetTime.isSameOrAfter(event.OccuredOn)) {   
+                this.totalDealerElement.text(this.numberFormat.format(event.StartStat));
+                this.totalDealerGmsStats.splice(i, 1);
+            }
+        }
+       // this.totalDealerElement.text(this.numberFormat.format(this.getCurrentGms(this.currentTime, this.nextUpdateDue, this.totalDealerGms)));
+
+
     }
     getCurrentGms(startDate: moment.Moment , endDate:moment.Moment, stat:StatModel):number {
         let timeDifference = endDate.diff(startDate, "s")
