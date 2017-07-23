@@ -1,4 +1,5 @@
-﻿class StandAloneEvent {
+﻿/// <reference path="PulseMap.ts" />
+class StandAloneEvent {
     constructor(jsonObject: any) {
         this.OccuredOn = moment(jsonObject.OccuredOn);
         this.Latitude = jsonObject.Latitude;
@@ -118,7 +119,7 @@ class PulseApiConnection {
 
     updateEvents() {
         this.setTime();
-        let offsetTime = moment(this.currentTime).subtract(5, "s");
+        let offsetTime = moment(this.currentTime).subtract(5, "m");
         let c = this.currentTime.toISOString();
         let nu = this.nextUpdateDue.toISOString();
         let ot = offsetTime.toISOString();
@@ -126,7 +127,7 @@ class PulseApiConnection {
         if (this.currentTime.isSameOrAfter(this.nextUpdateDue)) {
             this.getNewEvents(offsetTime, this.currentTime);            
             // set when last update occured
-            this.nextUpdateDue = moment(this.currentTime).add(40, "s");
+            this.nextUpdateDue = moment(this.currentTime).add(5, "m");
         }
 
         // this.pulseMap.clearUsedLines();

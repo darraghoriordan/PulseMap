@@ -1,3 +1,4 @@
+/// <reference path="PulseMap.ts" />
 var StandAloneEvent = (function () {
     function StandAloneEvent(jsonObject) {
         this.OccuredOn = moment(jsonObject.OccuredOn);
@@ -74,7 +75,7 @@ var PulseApiConnection = (function () {
     };
     PulseApiConnection.prototype.updateEvents = function () {
         this.setTime();
-        var offsetTime = moment(this.currentTime).subtract(5, "s");
+        var offsetTime = moment(this.currentTime).subtract(5, "m");
         var c = this.currentTime.toISOString();
         var nu = this.nextUpdateDue.toISOString();
         var ot = offsetTime.toISOString();
@@ -82,7 +83,7 @@ var PulseApiConnection = (function () {
         if (this.currentTime.isSameOrAfter(this.nextUpdateDue)) {
             this.getNewEvents(offsetTime, this.currentTime);
             // set when last update occured
-            this.nextUpdateDue = moment(this.currentTime).add(40, "s");
+            this.nextUpdateDue = moment(this.currentTime).add(5, "m");
         }
         // this.pulseMap.clearUsedLines();
         //  this.pulseMap.clearUsedMarkers();

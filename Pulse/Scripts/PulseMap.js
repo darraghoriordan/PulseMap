@@ -182,11 +182,17 @@ var PulseMap = (function () {
         return this.map;
     };
     PulseMap.prototype.addInteraction = function (startLocation, endLocation) {
+        if (document.hidden) {
+            return;
+        }
         this.addMarker(startLocation, 3, 'normal');
         this.addLineAnimation(startLocation, endLocation, '#00FFCD');
         this.addMarker(endLocation, 3, 'normal');
     };
     PulseMap.prototype.addComment = function (startLocation, endLocation) {
+        if (document.hidden) {
+            return;
+        }
         this.addMarker(startLocation, 6, 'small');
         this.addLineAnimation(startLocation, endLocation, '#FFF');
         this.addMarker(endLocation, 6, 'small');
@@ -224,6 +230,9 @@ var PulseMap = (function () {
     };
     // Add a marker to the map and push to the array.
     PulseMap.prototype.addMarker = function (location, color, size) {
+        if (document.hidden) {
+            return;
+        }
         var classString = 'mapPointPulse ';
         var labelAnchorOffset = 0;
         switch (size) {

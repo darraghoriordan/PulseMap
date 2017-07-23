@@ -31,7 +31,7 @@ namespace Pulse.Services
         private int GetSelector(Random rnd, DateTime startDate, DateTime endDate)
         {
             TimeSpan timeSpan = endDate - startDate;            
-           return rnd.Next(timeSpan.Seconds, timeSpan.Seconds *2);
+           return rnd.Next((int)timeSpan.TotalSeconds, (int)(timeSpan.TotalSeconds * 2));
         }
 
         public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents(DateTime startDate, DateTime endDate)
