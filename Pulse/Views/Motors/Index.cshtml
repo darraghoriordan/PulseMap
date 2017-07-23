@@ -3,5 +3,17 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Dealer GMS Today</h2>
+<div class="statsItem" id="totalDealerGmsStat">
+    <span class="statsValueText">Starting...</span>
+</div>
+@section scripts{
+    <script type="text/javascript" src="~/Scripts/StatCounter.js"></script>
+    <script type="text/javascript">
+        $(document).ready(() => {
+            var statHelper = new StatCounter();         
+            statHelper.startEventsService();
 
+        });
+    </script>
+    }

@@ -51,6 +51,10 @@ class PulseApiConnection {
     pulseMap: PulseMap
     newListings: number;
     soldListings: number;
+    timeElement: JQuery;
+    newElement: JQuery;
+    soldElement: JQuery;
+
     constructor() {
         this.pulseMap = new PulseMap();
         this.standAloneEvents = new Array<StandAloneEvent>();
@@ -58,7 +62,10 @@ class PulseApiConnection {
         this.interactionEvents = new Array<InteractionEvent>();
         this.newListings = 0;
         this.soldListings = 0;
-        this.nextUpdateDue = moment('2015-10-15')
+        this.nextUpdateDue = moment('2015-10-15');
+        this.timeElement = $('#timeStat .statsValueText');
+        this.newElement = $('#itemsListedStat .statsValueText');
+        this.soldElement = $('#itemsSoldStat .statsValueText');
     }
     startEventsService() {
         setInterval(() => { this.updateEvents(); }, 500);
@@ -120,9 +127,7 @@ class PulseApiConnection {
     updateEvents() {
         this.setTime();
         let offsetTime = moment(this.currentTime).subtract(5, "m");
-        let c = this.currentTime.toISOString();
-        let nu = this.nextUpdateDue.toISOString();
-        let ot = offsetTime.toISOString();
+
         //do we need new data?
         if (this.currentTime.isSameOrAfter(this.nextUpdateDue)) {
             this.getNewEvents(offsetTime, this.currentTime);            
@@ -160,13 +165,13 @@ class PulseApiConnection {
             }
         }
 
-        $('#itemsListedStat .statsValueText').text(this.newListings);
-        $('#itemsSoldStat .statsValueText').text(this.soldListings);
+        this.newElement.text(this.newListings);
+        this.soldElement.text(this.soldListings);
     }
 
     setTime() {
         this.currentTime = moment();
-        $('#timeStat .statsValueText').text(this.currentTime.format('HH:mm:ss'));
+        this.timeElement.text(this.currentTime.format('HH:mm:ss'));
 
     }
 }

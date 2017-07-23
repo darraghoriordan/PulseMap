@@ -34,6 +34,9 @@ var PulseApiConnection = (function () {
         this.newListings = 0;
         this.soldListings = 0;
         this.nextUpdateDue = moment('2015-10-15');
+        this.timeElement = $('#timeStat .statsValueText');
+        this.newElement = $('#itemsListedStat .statsValueText');
+        this.soldElement = $('#itemsSoldStat .statsValueText');
     }
     PulseApiConnection.prototype.startEventsService = function () {
         var _this = this;
@@ -76,9 +79,6 @@ var PulseApiConnection = (function () {
     PulseApiConnection.prototype.updateEvents = function () {
         this.setTime();
         var offsetTime = moment(this.currentTime).subtract(5, "m");
-        var c = this.currentTime.toISOString();
-        var nu = this.nextUpdateDue.toISOString();
-        var ot = offsetTime.toISOString();
         //do we need new data?
         if (this.currentTime.isSameOrAfter(this.nextUpdateDue)) {
             this.getNewEvents(offsetTime, this.currentTime);
@@ -112,12 +112,12 @@ var PulseApiConnection = (function () {
                 this.commentEvents.splice(i, 1);
             }
         }
-        $('#itemsListedStat .statsValueText').text(this.newListings);
-        $('#itemsSoldStat .statsValueText').text(this.soldListings);
+        this.newElement.text(this.newListings);
+        this.soldElement.text(this.soldListings);
     };
     PulseApiConnection.prototype.setTime = function () {
         this.currentTime = moment();
-        $('#timeStat .statsValueText').text(this.currentTime.format('HH:mm:ss'));
+        this.timeElement.text(this.currentTime.format('HH:mm:ss'));
     };
     return PulseApiConnection;
 }());

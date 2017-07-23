@@ -138,5 +138,16 @@ SELECT a.categoryId as CategoryId, vws.response_date as OccuredOn ,r1.RegionName
                 return conn.Query<int>(query, new { startDate, endDate }).First();
             }
         }
+
+        public StatModel GetTotalDealerGms(DateTime startDate, DateTime endDate)
+        {
+            endDate = OffSetDateTimeForDataWarehouse(endDate);
+            startDate = OffSetDateTimeForDataWarehouse(startDate);
+            var query = @"SELECT COUNT (*) as StartStat, COUNT (*) as EndStat FROM auction (NOLOCK) WHERE StartDate>@startDate AND StartDate<@endDate;";
+            using (var conn = GetConnection())
+            {
+                return conn.Query<StatModel>(query, new { startDate,endDate }).First();
+            }
+        }
     }
 }

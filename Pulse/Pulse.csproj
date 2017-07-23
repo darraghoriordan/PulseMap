@@ -242,6 +242,7 @@
     <Compile Include="Models\IMapCoordinates.cs" />
     <Compile Include="Models\InteractionEvent.cs" />
     <Compile Include="Models\StandaloneEvent.cs" />
+    <Compile Include="Models\StatModel.cs" />
     <Compile Include="NinjectModules\FakedNinjectModule.cs" />
     <Compile Include="NinjectModules\MainNinjectModule.cs" />
     <Compile Include="Services\EventOffsetService.cs" />
@@ -342,6 +343,7 @@
     <TypeScriptCompile Include="Scripts\PulseApiConnection.ts" />
     <TypeScriptCompile Include="Scripts\PulseHubConnection.ts" />
     <TypeScriptCompile Include="Scripts\PulseMap.ts" />
+    <TypeScriptCompile Include="Scripts\StatCounter.ts" />
     <TypeScriptCompile Include="Scripts\typings\google.maps.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />

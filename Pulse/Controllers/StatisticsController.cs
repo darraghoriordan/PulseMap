@@ -28,5 +28,12 @@ namespace Pulse.Controllers
             var events = _tradeMeEventService.GetStatsSoldToday(startDate, endDate);
             return events;
         }
+        [Route("TotalDealerGms")]
+        [HttpGet]
+        public Models.StatModel GetStatsTotalDealerGms(DateTime startDate, DateTime endDate)
+        {
+            var events = _tradeMeEventService.GetStatsTotalDealerGms(startDate,endDate);
+            return events;
+        }
     }
 }

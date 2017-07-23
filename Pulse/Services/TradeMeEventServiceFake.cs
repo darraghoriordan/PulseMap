@@ -57,6 +57,11 @@ namespace Pulse.Services
 
             return list;
         }
+
+        public Models.StatModel GetStatsTotalDealerGms(DateTime startDate, DateTime endDate)
+        {
+            return new StatModel { StartStat = 10000, EndStat = 10000 + _rnd.Next() };
+        }
         public int GetStatsSoldToday(DateTime startDate, DateTime endDate)
         {
             return 10000;
@@ -159,5 +164,7 @@ namespace Pulse.Services
 
             return rnd.NextDouble() * (maximum - minimum) + minimum;
         }
+
+
     }
 }
