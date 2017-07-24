@@ -110,12 +110,12 @@ var PulseApiConnection = (function () {
                 this.commentEvents.splice(i, 1);
             }
         }
-        if (this.newListings > 0) {
-            this.newElement.text(this.newListings);
-        }
-        if (this.soldListings > 0) {
-            this.soldElement.text(this.soldListings);
-        }
+        // if (this.newListings > 0) {
+        this.newElement.text(this.newListings);
+        // }
+        // if (this.soldListings > 0) {
+        this.soldElement.text(this.soldListings);
+        // }
     };
     PulseApiConnection.prototype.setTime = function () {
         this.currentTime = moment();

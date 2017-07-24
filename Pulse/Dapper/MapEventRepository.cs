@@ -160,7 +160,7 @@ SELECT a.categoryId as CategoryId, vws.response_date as OccuredOn ,r1.RegionName
             {
                 return
                     conn.Query<StatModel>(
-                            @" SELECT startprice, startdate as OccuredOn from trademe.dbo.auction a with (NOLOCK)
+                            @" SELECT startprice as StartStat, startdate as OccuredOn from trademe.dbo.auction a with (NOLOCK)
                                     WHERE [startdate]>=@startDate AND [startdate]<@endDate 
                                     and memberid = 5633
                                     ORDER BY startdate asc;", new { startDate, endDate }).ToList();
