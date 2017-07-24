@@ -11,7 +11,7 @@ namespace Pulse.Services
 
         public string GoogleMapsUrl => "https://maps.googleapis.com/maps/api/js?key=AIzaSyDNL201u2ck7_67jdYM6L-Li2UAfFlQCHo";
 
-        public int OffsetInHours => 5;
+        public int OffsetInHours => 0;
 
         public TimeSpan ClientUpdateInterval => _clientUpdateInterval;
         public TimeSpan EventStoreUpdateInterval => _eventStoreUpdateInterval;

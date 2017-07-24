@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using Microsoft.AspNet.SignalR;
 using Ninject.Modules;
+using Pulse.Dapper;
 using Pulse.Models;
 using Pulse.Services;
 
@@ -19,6 +20,7 @@ namespace Pulse.NinjectModules
             Bind<ISettingsService>().To<SettingsService>();
             Bind<IEventOffsetService>().To<EventOffsetService>();
             Bind<ILocalityStoreService>().To<LocalityStoreService>();
+            Bind<IMapEventRepository>().To<MapEventRepository>();
         }
     }
 }

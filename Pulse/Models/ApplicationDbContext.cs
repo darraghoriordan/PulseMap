@@ -4,9 +4,10 @@ namespace Pulse.Models
 {
     public class ApplicationDbContext : DbContext, ILocalityDbContext
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection")
+        public ApplicationDbContext(string connectionString)
+            : base(connectionString)
         {
+            
         }
         /// <summary>
         /// overridden for interface
@@ -21,7 +22,7 @@ namespace Pulse.Models
 
         public static ApplicationDbContext Create()
         {
-            return new ApplicationDbContext();
+            return new ApplicationDbContext("LocalityConnection");
         }
     }
 }

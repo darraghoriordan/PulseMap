@@ -109,10 +109,7 @@ SELECT a.categoryId as CategoryId, vws.response_date as OccuredOn ,r1.RegionName
 
         public int GetSoldToday(DateTime startDate, DateTime endDate)
         {
-            if (!DateTimeDifferenceIsSane(startDate, endDate))
-            {
-                return 0;
-            }
+            startDate = new DateTime(endDate.Year, endDate.Month, endDate.Day);
             startDate = OffSetDateTimeForDataWarehouse(startDate);
             endDate = OffSetDateTimeForDataWarehouse(endDate);
             var query = @"SELECT COUNT (*) FROM auction_sold (NOLOCK) WHERE sold_date>@startDate AND sold_date<@endDate;";
@@ -125,11 +122,7 @@ SELECT a.categoryId as CategoryId, vws.response_date as OccuredOn ,r1.RegionName
 
         public int GetNewToday(DateTime startDate, DateTime endDate)
         {
-            if (!DateTimeDifferenceIsSane(startDate, endDate))
-            {
-                return 0;
-            }
-
+            startDate = new DateTime(endDate.Year,endDate.Month, endDate.Day);
             startDate = OffSetDateTimeForDataWarehouse(startDate);
             endDate = OffSetDateTimeForDataWarehouse(endDate);
             var query = @"SELECT COUNT (*) FROM auction (NOLOCK) WHERE StartDate>@startDate AND StartDate<@endDate;";

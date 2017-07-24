@@ -9,7 +9,7 @@ namespace Pulse.Controllers
     [RoutePrefix("api/statistics")]
     public class StatisticsController : ApiController
     {
-        private ITradeMeEventService _tradeMeEventService;
+        private readonly ITradeMeEventService _tradeMeEventService;
         public StatisticsController(ITradeMeEventService tradeMeEventService)
         {
             _tradeMeEventService = tradeMeEventService;
@@ -30,6 +30,7 @@ namespace Pulse.Controllers
             var events = _tradeMeEventService.GetStatsSoldToday(startDate, endDate);
             return events;
         }
+
         [Route("TotalDealerGms")]
         [HttpGet]
         public IEnumerable<Models.StatModel> GetStatsTotalDealerGms(DateTime startDate, DateTime endDate)

@@ -16,6 +16,7 @@ namespace Pulse.Services
 
         public TradeMeStandaloneEvent ApplyOffsets(TradeMeStandaloneEvent pulseEvent)
         {
+            pulseEvent.OccuredOn = ApplyEventTimeOffset(pulseEvent.OccuredOn);
             pulseEvent.Latitude = ApplyRandomCoordinateOffset(pulseEvent.Latitude);
             pulseEvent.Longitude = ApplyRandomCoordinateOffset(pulseEvent.Longitude);
             return pulseEvent;

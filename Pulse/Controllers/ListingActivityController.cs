@@ -9,7 +9,7 @@ namespace Pulse.Controllers
     [RoutePrefix("api/events")]
     public class ListingActivityController : ApiController
     {
-        private ITradeMeEventService _tradeMeEventService;
+        private readonly ITradeMeEventService _tradeMeEventService;
         public ListingActivityController(ITradeMeEventService tradeMeEventService)
         {
             _tradeMeEventService = tradeMeEventService;
@@ -28,7 +28,7 @@ namespace Pulse.Controllers
         public IEnumerable<Models.TradeMeInteractionEvent> GetInteractiveEvents(DateTime startDate, DateTime endDate)
         {
             var events = _tradeMeEventService.GetLatestInteractionEvents(startDate, endDate).OrderBy(x => x.OccuredOn);
-            var s = events.Count();
+          
             return events;
         }
 
@@ -37,7 +37,7 @@ namespace Pulse.Controllers
         public IEnumerable<Models.TradeMeInteractionEvent> GetCommentEvents(DateTime startDate, DateTime endDate)
         {
             var events = _tradeMeEventService.GetLatestCommentEvents(startDate, endDate).OrderBy(x => x.OccuredOn);
-            var s = events.Count();
+         
             return events;
         }
     }
