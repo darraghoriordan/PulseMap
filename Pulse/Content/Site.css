@@ -27,7 +27,7 @@ body {
 }
 
 .statsValueText {
-    font-size: 4em;
+    font-size: 20em;
     clear: both;
     font-family: museo300;
     display: block;
@@ -40,9 +40,15 @@ body {
     /* align-items: center; */
     min-height: 100%;
     min-height: 100vh;
+    -ms-align-items: center;
+    -o-align-items: center;
+    -webkit-align-items: center;
     align-items: center;
+    -o-justify-content: center;
+    -webkit-justify-content: center;
     justify-content: center;
 }
+
 .statsItem {
     border-bottom: #fff 1px solid;
     margin-bottom: 10px;
@@ -70,15 +76,15 @@ body {
     padding: 0;
 }
 
-#timeStat .statsValueText{
+#timeStat .statsValueText {
     background-size: 35px 35px;
     background-image: url('icon_time.png');
     background-repeat: no-repeat;
     background-position: left;
-        padding-left: 50px;
+    padding-left: 50px;
 }
 
-#itemsSoldStat .statsValueText{
+#itemsSoldStat .statsValueText {
     background-size: 35px 35px;
     background-image: url('icon_sold.png');
     background-repeat: no-repeat;
@@ -87,7 +93,7 @@ body {
     padding-left: 50px;
 }
 
-#itemsListedStat .statsValueText{
+#itemsListedStat .statsValueText {
     background-size: 35px 35px;
     background-image: url('icon_listed.png');
     background-repeat: no-repeat;
@@ -114,19 +120,19 @@ body {
     box-sizing: border-box;
     background: #FF9AAE;
     opacity: 0.6;
-    -webkit-animation: pulse 1.5s linear 0s 1;
-    -moz-animation: pulse 1.5s linear 0s 1;
-    animation: pulse 1.5s linear 0s 1;
+    -webkit-animation: pulse 1.5s linear 0 1;
+    -moz-animation: pulse 1.5s linear 0 1;
+    animation: pulse 1.5s linear 0 1;
 }
 
 .pulseSizeNormal {
-        height: 30px;
+    height: 30px;
     width: 30px;
     border-radius: 15px;
 }
 
 .pulseSizeSmall {
-        height: 15px;
+    height: 15px;
     width: 15px;
     border-radius: 7.5px;
 }
@@ -150,6 +156,7 @@ body {
 .yellow {
     background: #FFF79A;
 }
+
 .white {
     background: #FFF;
 }

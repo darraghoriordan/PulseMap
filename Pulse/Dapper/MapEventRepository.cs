@@ -132,15 +132,38 @@ SELECT a.categoryId as CategoryId, vws.response_date as OccuredOn ,r1.RegionName
             }
         }
 
+        public int GetDealerGmsToday(DateTime startDate, DateTime endDate)
+        {
+            startDate = new DateTime(endDate.Year, endDate.Month, endDate.Day);
+            startDate = OffSetDateTimeForDataWarehouse(startDate);
+            endDate = OffSetDateTimeForDataWarehouse(endDate);
+            var query = @"SELECT sum(startprice) from trademe.dbo.auction a with (NOLOCK)
+                            WHERE [startdate]>=@startDate AND [startdate]<@endDate 
+                            and memberid = 5633;";
+
+            using (var conn = GetConnection())
+            {
+                return conn.Query<int>(query, new { startDate, endDate }).First();
+            }
+        }
+
         public IList<StatModel> GetLatestTotalDealerGms(DateTime startDate, DateTime endDate)
         {
             endDate = OffSetDateTimeForDataWarehouse(endDate);
             startDate = OffSetDateTimeForDataWarehouse(startDate);
-            throw new Exception("This needs implementation");
-            var query = @"SELECT COUNT (*) as StartStat, COUNT (*) as EndStat FROM auction (NOLOCK) WHERE StartDate>@startDate AND StartDate<@endDate;";
+            if (!DateTimeDifferenceIsSane(startDate, endDate))
+            {
+                return new List<StatModel>();
+            }
+
             using (var conn = GetConnection())
             {
-                return conn.Query<StatModel>(query, new { startDate,endDate }).ToList();
+                return
+                    conn.Query<StatModel>(
+                            @" SELECT startprice, startdate as OccuredOn from trademe.dbo.auction a with (NOLOCK)
+                                    WHERE [startdate]>=@startDate AND [startdate]<@endDate 
+                                    and memberid = 5633
+                                    ORDER BY startdate asc;", new { startDate, endDate }).ToList();
             }
         }
     }

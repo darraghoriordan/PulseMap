@@ -5,9 +5,7 @@ namespace Pulse.App_Start
 {
     using System;
     using System.Web;
-
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
     using Ninject;
     using Ninject.Web.Common;
     using System.Web.Http;
@@ -65,11 +63,10 @@ namespace Pulse.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-
             kernel.Load(new NinjectModules.MainNinjectModule());
 
             // use the following for testing
-           kernel.Load(new NinjectModules.FakedNinjectModule());
+         //  kernel.Load(new NinjectModules.FakedNinjectModule());
 
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
         }        

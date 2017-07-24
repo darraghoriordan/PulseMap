@@ -8,6 +8,7 @@ var StatModel = (function () {
 var StatCounter = (function () {
     function StatCounter() {
         this.nextUpdateDue = moment('2015-10-15');
+        this.totalDealerGms = 0;
         this.totalDealerElement = $('#totalDealerGmsStat .statsValueText');
         this.totalDealerGmsStats = new Array();
         this.numberFormat = new Intl.NumberFormat('en-NZ', {
@@ -24,11 +25,16 @@ var StatCounter = (function () {
         var currentInstance = this;
         var edString = endDate.toISOString();
         var sdString = startDate.toISOString();
-        $.get("/api/statistics/totaldealergms", { startDate: sdString, endDate: edString }, function (cdata) {
+        var startOfDay = moment().startOf("day").toISOString();
+        $.get("/api/events/newdealergms", { startDate: sdString, endDate: edString }, function (cdata) {
             if (cdata)
                 currentInstance.totalDealerGmsStats = $.map(cdata, function (x) {
                     return new StatModel(x);
                 });
+        });
+        $.get("/api/statistics/totaldealergms", { startDate: startOfDay, endDate: sdString }, function (cdata) {
+            if (cdata)
+                currentInstance.totalDealerGms = cdata;
         });
     };
     StatCounter.prototype.updateEvents = function () {
@@ -44,15 +50,13 @@ var StatCounter = (function () {
             var offset = offsetTime.toISOString();
             var occ = event_1.OccuredOn.toISOString();
             if (offsetTime.isSameOrAfter(event_1.OccuredOn)) {
-                this.totalDealerElement.text(this.numberFormat.format(event_1.StartStat));
+                this.totalDealerGms += event_1.StartStat;
                 this.totalDealerGmsStats.splice(i, 1);
             }
         }
-        // this.totalDealerElement.text(this.numberFormat.format(this.getCurrentGms(this.currentTime, this.nextUpdateDue, this.totalDealerGms)));
-    };
-    StatCounter.prototype.getCurrentGms = function (startDate, endDate, stat) {
-        var timeDifference = endDate.diff(startDate, "s");
-        return timeDifference;
+        if (this.totalDealerGms > 0) {
+            this.totalDealerElement.text(this.numberFormat.format(this.totalDealerGms));
+        }
     };
     StatCounter.prototype.setTime = function () {
         this.currentTime = moment();

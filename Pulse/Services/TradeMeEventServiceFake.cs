@@ -59,6 +59,11 @@ namespace Pulse.Services
             return list;
         }
 
+        public int GetDealerGmsToday(DateTime startDate, DateTime endDate)
+        {
+            return 2000000;
+        }
+
         public IEnumerable<StatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate)
         {
             var list = new List<StatModel>();

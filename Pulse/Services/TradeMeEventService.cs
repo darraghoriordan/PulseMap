@@ -43,6 +43,10 @@ namespace Pulse.Services
         {
             return _mapEventRepository.GetNewToday(startDate, endDate);
         }
+        public int GetDealerGmsToday(DateTime startDate, DateTime endDate)
+        {
+            return _mapEventRepository.GetDealerGmsToday(startDate, endDate);
+        }
         public IEnumerable<StatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate)
         {
             return _mapEventRepository.GetLatestTotalDealerGms(startDate, endDate);

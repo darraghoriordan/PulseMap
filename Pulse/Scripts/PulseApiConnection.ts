@@ -8,12 +8,12 @@ class StandAloneEvent {
         this.Suburb = jsonObject.Suburb;
         this.CategoryId = jsonObject.CategoryId;
     }
-    public OccuredOn: moment.Moment
-    public Latitude: number
-    public Longitude: number
-    public Region: string
-    public Suburb: string
-    public CategoryId: number
+    public OccuredOn: moment.Moment;
+    public Latitude: number;
+    public Longitude: number;
+    public Region: string;
+    public Suburb: string;
+    public CategoryId: number;
 }
 
 class InteractionEvent {
@@ -30,16 +30,16 @@ class InteractionEvent {
         this.EndLongitude = jsonData.EndLongitude;
     }
 
-    public StartRegion: string
-    public StartSuburb: string
-    public EndRegion: string
-    public EndSuburb: string
-    public CategoryId: number
-    public OccuredOn: moment.Moment
-    public StartLatitude: number
-    public StartLongitude: number
-    public EndLatitude: number
-    public EndLongitude: number
+    public StartRegion: string;
+    public StartSuburb: string;
+    public EndRegion: string;
+    public EndSuburb: string;
+    public CategoryId: number;
+    public OccuredOn: moment.Moment;
+    public StartLatitude: number;
+    public StartLongitude: number;
+    public EndLatitude: number;
+    public EndLongitude: number;
 }
 
 class PulseApiConnection {
@@ -47,8 +47,8 @@ class PulseApiConnection {
     standAloneEvents: StandAloneEvent[];
     interactionEvents: InteractionEvent[];
     commentEvents: InteractionEvent[];
-    nextUpdateDue: moment.Moment
-    pulseMap: PulseMap
+    nextUpdateDue: moment.Moment;
+    pulseMap: PulseMap;
     newListings: number;
     soldListings: number;
     timeElement: JQuery;
@@ -161,9 +161,12 @@ class PulseApiConnection {
                 this.commentEvents.splice(i, 1);
             }
         }
-
-        this.newElement.text(this.newListings);
-        this.soldElement.text(this.soldListings);
+        if (this.newListings > 0) {
+            this.newElement.text(this.newListings);
+        }
+        if (this.soldListings > 0) {
+            this.soldElement.text(this.soldListings);
+        }
     }
 
     setTime() {
