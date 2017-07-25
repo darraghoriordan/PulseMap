@@ -22,7 +22,7 @@ namespace Pulse.Models
 
         public static ApplicationDbContext Create()
         {
-            return new ApplicationDbContext("LocalityConnection");
+            return new ApplicationDbContext("DefaultConnection");
         }
     }
 }

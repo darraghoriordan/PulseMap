@@ -12,15 +12,16 @@ var PulseMap = (function () {
         };
     }
     PulseMap.prototype.createMap = function () {
+        var _this = this;
         var mapOptions = {
             center: this.wellington,
             zoom: 6,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        this.map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-        this.map.set('styles', [
+        this.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        this.map.set("styles", [
             {
-                "featureType": 'all',
+                "featureType": "all",
                 "elementType": 'labels.text.fill',
                 "stylers": [
                     {
@@ -176,9 +177,9 @@ var PulseMap = (function () {
             }
         ]);
         //This event listener will call addMarker() when the map is clicked.
-        //google.maps.event.addListener(this.map, 'click', event => {
-        //    this.addMarker(event.latLng, 1, 'normal');
-        //});
+        google.maps.event.addListener(this.map, 'click', function (event) {
+            _this.addMarker(event.latLng, 1, 'normal');
+        });
         return this.map;
     };
     PulseMap.prototype.addInteraction = function (startLocation, endLocation) {
@@ -223,25 +224,24 @@ var PulseMap = (function () {
         }, this.animationTimeout / 150);
         this.lines.push(path);
         path.setMap(this.map);
-        //window.setInterval(() => {
-        //        path.setMap(null);
-        //      delete path;
-        //}, this.animationTimeout);
+        setTimeout(function () {
+            path.setMap(null);
+        }, this.animationTimeout);
     };
     // Add a marker to the map and push to the array.
     PulseMap.prototype.addMarker = function (location, color, size) {
         if (document.hidden) {
             return;
         }
-        var classString = 'mapPointPulse ';
+        var classString = "mapPointPulse ";
         var labelAnchorOffset = 0;
         switch (size) {
-            case 'small':
-                classString = classString + 'pulseSizeSmall ';
+            case "small":
+                classString = classString + "pulseSizeSmall ";
                 labelAnchorOffset = 7;
                 break;
-            case 'normal':
-                classString = classString + 'pulseSizeNormal ';
+            case "normal":
+                classString = classString + "pulseSizeNormal ";
                 labelAnchorOffset = 15;
                 break;
             default:
@@ -278,9 +278,8 @@ var PulseMap = (function () {
             labelAnchor: new google.maps.Point(labelAnchorOffset, labelAnchorOffset)
         });
         marker.setMap(this.map);
-        setTimeout(function (markers) {
+        setTimeout(function () {
             marker.setMap(null);
-            marker = null;
         }, this.animationTimeout);
         // return marker;
     };

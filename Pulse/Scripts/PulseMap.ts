@@ -12,13 +12,13 @@
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
-        this.map = new google.maps.Map(document.getElementById('map-canvas'),
+        this.map = new google.maps.Map(document.getElementById("map-canvas"),
             mapOptions);
 
-        this.map.set('styles', [
+        this.map.set("styles", [
 
             {
-                "featureType": 'all',
+                "featureType": "all",
                 "elementType": 'labels.text.fill',
                 "stylers": [
                     {
@@ -177,9 +177,9 @@
         );
 
         //This event listener will call addMarker() when the map is clicked.
-        //google.maps.event.addListener(this.map, 'click', event => {
-        //    this.addMarker(event.latLng, 1, 'normal');
-        //});
+        google.maps.event.addListener(this.map, 'click', event => {
+            this.addMarker(event.latLng, 1, 'normal');
+        });
 
         return this.map;
     }
@@ -238,10 +238,9 @@
         this.lines.push(path);
         path.setMap(this.map);
 
-        //window.setInterval(() => {
-        //        path.setMap(null);
-        //      delete path;
-        //}, this.animationTimeout);
+        setTimeout(() => {
+            path.setMap(null);
+        }, this.animationTimeout);
 
     }
 
@@ -250,15 +249,15 @@
         if (document.hidden) {
             return;
         }
-        var classString = 'mapPointPulse ';
+        var classString = "mapPointPulse ";
         var labelAnchorOffset = 0;
         switch (size) {
-            case 'small':
-                classString = classString + 'pulseSizeSmall ';
+            case "small":
+                classString = classString + "pulseSizeSmall ";
                 labelAnchorOffset = 7;
                 break;
-            case 'normal':
-                classString = classString + 'pulseSizeNormal ';
+            case "normal":
+                classString = classString + "pulseSizeNormal ";
                 labelAnchorOffset = 15;
                 break;
             default:
@@ -297,11 +296,9 @@
             labelAnchor: new google.maps.Point(labelAnchorOffset, labelAnchorOffset)
         });
         marker.setMap(this.map);
-
-        setTimeout((markers: Array<google.maps.Marker>) => {
+       
+        setTimeout(() => {
             marker.setMap(null);
-            marker = null;
-
         }, this.animationTimeout);
         // return marker;
 

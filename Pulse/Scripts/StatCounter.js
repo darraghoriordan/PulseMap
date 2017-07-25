@@ -11,6 +11,7 @@ var StatCounter = (function () {
         this.totalDealerGms = 0;
         this.totalDealerElement = $('#totalDealerGmsStat .statsValueText');
         this.totalDealerGmsStats = new Array();
+        this.localPlaybackOffset = 5;
         this.numberFormat = new Intl.NumberFormat('en-NZ', {
             style: 'currency',
             currency: 'NZD',
@@ -23,8 +24,8 @@ var StatCounter = (function () {
     };
     StatCounter.prototype.getNewEvents = function (startDate, endDate) {
         var currentInstance = this;
-        var edString = endDate.toISOString();
         var sdString = startDate.toISOString();
+        var edString = endDate.toISOString();
         var startOfDay = moment().startOf("day").toISOString();
         $.get("/api/events/newdealergms", { startDate: sdString, endDate: edString }, function (cdata) {
             if (cdata)
@@ -38,12 +39,12 @@ var StatCounter = (function () {
         });
     };
     StatCounter.prototype.updateEvents = function () {
-        this.setTime();
-        var offsetTime = moment(this.currentTime).subtract(5, "m");
+        this.currentTime = moment();
+        var offsetTime = moment().subtract(this.localPlaybackOffset, "m");
         if (this.currentTime.isSameOrAfter(this.nextUpdateDue)) {
             this.getNewEvents(offsetTime, this.currentTime);
             // set when last update occured
-            this.nextUpdateDue = moment(this.currentTime).add(5, "m");
+            this.nextUpdateDue = moment(this.currentTime).add(this.localPlaybackOffset, "m");
         }
         for (var i = 0; i < this.totalDealerGmsStats.length; i++) {
             var event_1 = this.totalDealerGmsStats[i];
@@ -57,10 +58,6 @@ var StatCounter = (function () {
         if (this.totalDealerGms > 0) {
             this.totalDealerElement.text(this.numberFormat.format(this.totalDealerGms));
         }
-    };
-    StatCounter.prototype.setTime = function () {
-        this.currentTime = moment();
-        // this.timeElement.text(this.currentTime.format('HH:mm:ss'));
     };
     return StatCounter;
 }());

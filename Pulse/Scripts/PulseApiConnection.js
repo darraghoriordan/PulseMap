@@ -90,7 +90,7 @@ var PulseApiConnection = (function () {
         for (var i = 0; i < this.standAloneEvents.length; i++) {
             var event_1 = this.standAloneEvents[i];
             if (offsetTime.isSameOrAfter(event_1.OccuredOn)) {
-                this.pulseMap.addMarker(new google.maps.LatLng(event_1.Latitude, event_1.Longitude), 1, 'normal');
+                this.pulseMap.addMarker(new google.maps.LatLng(event_1.Latitude, event_1.Longitude), 1, "normal");
                 this.newListings++;
                 this.standAloneEvents.splice(i, 1);
             }

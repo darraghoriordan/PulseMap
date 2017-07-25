@@ -140,7 +140,7 @@ class PulseApiConnection {
         for (var i = 0; i < this.standAloneEvents.length; i++) {
             let event = this.standAloneEvents[i];
             if (offsetTime.isSameOrAfter(event.OccuredOn)) {
-                    this.pulseMap.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude), 1, 'normal');                
+                    this.pulseMap.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude), 1, "normal");                
                 this.newListings++;
                 this.standAloneEvents.splice(i, 1);
             }

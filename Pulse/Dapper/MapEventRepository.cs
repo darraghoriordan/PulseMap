@@ -147,23 +147,24 @@ SELECT a.categoryId as CategoryId, vws.response_date as OccuredOn ,r1.RegionName
             }
         }
 
-        public IList<StatModel> GetLatestTotalDealerGms(DateTime startDate, DateTime endDate)
+        public IList<DealerGmsStatModel> GetLatestTotalDealerGms(DateTime startDate, DateTime endDate)
         {
             endDate = OffSetDateTimeForDataWarehouse(endDate);
             startDate = OffSetDateTimeForDataWarehouse(startDate);
             if (!DateTimeDifferenceIsSane(startDate, endDate))
             {
-                return new List<StatModel>();
+                return new List<DealerGmsStatModel>();
             }
 
             using (var conn = GetConnection())
             {
-                return
-                    conn.Query<StatModel>(
-                            @" SELECT startprice as StartStat, startdate as OccuredOn from trademe.dbo.auction a with (NOLOCK)
+                var models =
+                    conn.Query<DealerGmsStatModel>(
+                            @"SELECT startprice as StartStat, startdate as OccuredOn from trademe.dbo.auction a with (NOLOCK)
                                     WHERE [startdate]>=@startDate AND [startdate]<@endDate 
                                     and memberid = 5633
                                     ORDER BY startdate asc;", new { startDate, endDate }).ToList();
+                return models;
             }
         }
     }

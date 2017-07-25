@@ -242,7 +242,7 @@
     <Compile Include="Models\IMapCoordinates.cs" />
     <Compile Include="Models\InteractionEvent.cs" />
     <Compile Include="Models\StandaloneEvent.cs" />
-    <Compile Include="Models\StatModel.cs" />
+    <Compile Include="Models\DealerGmsStatModel.cs" />
     <Compile Include="NinjectModules\FakedNinjectModule.cs" />
     <Compile Include="NinjectModules\MainNinjectModule.cs" />
     <Compile Include="Services\EventOffsetService.cs" />

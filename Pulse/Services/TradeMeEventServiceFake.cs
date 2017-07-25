@@ -64,9 +64,9 @@ namespace Pulse.Services
             return 2000000;
         }
 
-        public IEnumerable<StatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate)
+        public IEnumerable<DealerGmsStatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate)
         {
-            var list = new List<StatModel>();
+            var list = new List<DealerGmsStatModel>();
             int selector = GetSelector(_rnd2, startDate, endDate);
             list.Add(GetRandomStatEvent(_rnd2, startDate, endDate));
             for (var i = 0; i <= selector; i++)
@@ -159,9 +159,9 @@ namespace Pulse.Services
 
             return tmEvent;
         }
-        private StatModel GetRandomStatEvent(Random rnd2, DateTime startDate, DateTime endDate)
+        private DealerGmsStatModel GetRandomStatEvent(Random rnd2, DateTime startDate, DateTime endDate)
         {
-            var stat = new StatModel()
+            var stat = new DealerGmsStatModel()
             {
                 OccuredOn = GetRandomDate(rnd2, startDate, endDate)
             };

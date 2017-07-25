@@ -22,17 +22,17 @@ namespace Pulse.Services
         public IEnumerable<TradeMeStandaloneEvent> GetLatestStandaloneEvents(DateTime startDate, DateTime endDate)
         {
             var listTmEvent = _mapEventRepository.GetSingleMapEvents(startDate, endDate);
-            return listTmEvent.Select(GetStandaloneEvent).ToList();
+            return listTmEvent.Select(GetStandaloneEvent);
         }
         public IEnumerable<TradeMeInteractionEvent> GetLatestInteractionEvents(DateTime startDate, DateTime endDate)
         {
             var listTmEvent = _mapEventRepository.GetInteractionMapEvents(startDate, endDate);
-            return listTmEvent.Select(GetInteractionEvent).ToList();
+            return listTmEvent.Select(GetInteractionEvent);
         }
         public IEnumerable<TradeMeInteractionEvent> GetLatestCommentEvents(DateTime startDate, DateTime endDate)
         {
             var listTmEvent = _mapEventRepository.GetComments(startDate, endDate);
-            return listTmEvent.Select(GetInteractionEvent).ToList();
+            return listTmEvent.Select(GetInteractionEvent);
         }
         public int GetStatsSoldToday(DateTime startDate, DateTime endDate)
         {
@@ -45,15 +45,24 @@ namespace Pulse.Services
         }
         public int GetDealerGmsToday(DateTime startDate, DateTime endDate)
         {
-            return _mapEventRepository.GetDealerGmsToday(startDate, endDate);
+           var gmstoday = _mapEventRepository.GetDealerGmsToday(startDate, endDate);
+            return gmstoday;
         }
-        public IEnumerable<StatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate)
+        public IEnumerable<DealerGmsStatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate)
         {
-            return _mapEventRepository.GetLatestTotalDealerGms(startDate, endDate);
+            var totalgms= _mapEventRepository.GetLatestTotalDealerGms(startDate, endDate);
+            return  totalgms.Select(GetDealerGmsStatEvent);
         }
         public TradeMeInteractionEvent GetInteractionEvent(TradeMeInteractionEvent myEvent)
         {
             myEvent = _geocoder.ApplyCoordinates(myEvent);
+            myEvent = _eventOffsetService.ApplyOffsets(myEvent);
+
+            return myEvent;
+        }
+
+        public DealerGmsStatModel GetDealerGmsStatEvent(DealerGmsStatModel myEvent)
+        {
             myEvent = _eventOffsetService.ApplyOffsets(myEvent);
 
             return myEvent;

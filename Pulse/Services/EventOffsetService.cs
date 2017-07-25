@@ -22,6 +22,12 @@ namespace Pulse.Services
             return pulseEvent;
         }
 
+        public DealerGmsStatModel ApplyOffsets(DealerGmsStatModel pulseEvent)
+        {
+            pulseEvent.OccuredOn = ApplyEventTimeOffset(pulseEvent.OccuredOn);
+            return pulseEvent;
+        }
+
         public TradeMeInteractionEvent ApplyOffsets(TradeMeInteractionEvent pulseEvent)
         {
             pulseEvent.OccuredOn = ApplyEventTimeOffset(pulseEvent.OccuredOn);

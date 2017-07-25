@@ -43,7 +43,7 @@ namespace Pulse.Controllers
 
         [Route("newdealergms")]
         [HttpGet]
-        public IEnumerable<Models.StatModel> NewDealerGms(DateTime startDate, DateTime endDate)
+        public IEnumerable<Models.DealerGmsStatModel> NewDealerGms(DateTime startDate, DateTime endDate)
         {
             var events = _tradeMeEventService.GetLatestStatsTotalDealerGms(startDate, endDate).OrderBy(x => x.OccuredOn);
 

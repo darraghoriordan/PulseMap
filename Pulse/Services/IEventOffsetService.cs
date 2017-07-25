@@ -9,5 +9,6 @@ namespace Pulse.Services
         DateTime ApplyEventTimeOffset(DateTime occuranceDate);
         double ApplyRandomCoordinateOffset(double number);
         TradeMeInteractionEvent ApplyOffsets(TradeMeInteractionEvent pulseEvent);
+        DealerGmsStatModel ApplyOffsets(DealerGmsStatModel pulseEvent);
     }
 }

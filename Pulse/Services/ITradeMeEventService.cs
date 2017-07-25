@@ -12,6 +12,6 @@ namespace Pulse.Services
         int GetStatsSoldToday(DateTime startDate, DateTime endDate);
         int GetStatsNewToday(DateTime startDate, DateTime endDate);
         int GetDealerGmsToday(DateTime startDate, DateTime endDate);
-        IEnumerable<StatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate);
+        IEnumerable<DealerGmsStatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate);
     }
 }

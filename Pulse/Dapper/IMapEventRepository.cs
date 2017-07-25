@@ -12,6 +12,6 @@ namespace Pulse.Dapper
         int GetSoldToday(DateTime startDate, DateTime endDate);
         int GetNewToday(DateTime startDate, DateTime endDate);
         int GetDealerGmsToday(DateTime startDate, DateTime endDate);
-        IList<StatModel> GetLatestTotalDealerGms(DateTime startDate, DateTime endDate);
+        IList<DealerGmsStatModel> GetLatestTotalDealerGms(DateTime startDate, DateTime endDate);
     }
 }

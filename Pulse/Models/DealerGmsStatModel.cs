@@ -2,9 +2,9 @@
 
 namespace Pulse.Models
 {
-    public class StatModel
+    public class DealerGmsStatModel
     {
-        public int StartStat { get; set; }
+        public decimal StartStat { get; set; }
         public DateTime OccuredOn { get; set; }
     }
 }
