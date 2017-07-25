@@ -2,11 +2,11 @@
     wellington = new google.maps.LatLng(-41.28, 174.77);
     map: google.maps.Map;
     markers: google.maps.Marker[] = new Array<google.maps.Marker>();
-    lines: google.maps.Polyline[] = new Array<google.maps.Polyline>();
-    animationTimeout: number = 1500; //milliseconds to delete animations
+    lines = new Array<google.maps.Polyline>();
+    animationTimeout = 1500; //milliseconds to delete animations
 
     createMap(): google.maps.Map {
-        var mapOptions: google.maps.MapOptions = {
+        const mapOptions: google.maps.MapOptions = {
             center: this.wellington,
             zoom: 6,
             mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -177,9 +177,9 @@
         );
 
         //This event listener will call addMarker() when the map is clicked.
-        google.maps.event.addListener(this.map, 'click', event => {
-            this.addMarker(event.latLng, 1, 'normal');
-        });
+      //  google.maps.event.addListener(this.map, 'click', event => {
+       //     this.addMarker(event.latLng, 1, 'normal');
+       // });
 
         return this.map;
     }
@@ -187,9 +187,9 @@
         if (document.hidden) {
             return;
         }
-        this.addMarker(startLocation, 3, 'normal');
-        this.addLineAnimation(startLocation, endLocation, '#00FFCD');
-        this.addMarker(endLocation, 3, 'normal');
+        this.addMarker(startLocation, 3, "normal");
+        this.addLineAnimation(startLocation, endLocation, "#00FFCD");
+        this.addMarker(endLocation, 3, "normal");
     }
 
     addComment(startLocation, endLocation) {
@@ -209,11 +209,11 @@
     };
 
     addLineAnimation(startLocation, endLocation, strokeColor) {
-        var path = new google.maps.Polyline({
+        const path = new google.maps.Polyline({
             path: [startLocation, endLocation],
             icons: [{
                 icon: this.lineSymbol,
-                offset: '0%'
+                offset: "0%"
             }],
             geodesic: true,
             strokeColor: strokeColor,
@@ -221,13 +221,13 @@
             strokeWeight: 2
         });
 
-        var count = 0;
-        var interval = window.setInterval(() => {
+        let count = 0;
+        const interval = setInterval(() => {
             count = (count + 1);
 
-            var icons = path.get('icons');
-            icons[0].offset = count + '%';
-            path.set('icons', icons);
+            var icons = path.get("icons");
+            icons[0].offset = count + "%";
+            path.set("icons", icons);
 
             if (count >= 100) {
                 icons[0].icon = null;
@@ -238,8 +238,9 @@
         this.lines.push(path);
         path.setMap(this.map);
 
-        setTimeout(() => {
-            path.setMap(null);
+       var timer= setTimeout(() => {
+           path.setMap(null);
+           clearTimeout(timer);
         }, this.animationTimeout);
 
     }
@@ -249,8 +250,8 @@
         if (document.hidden) {
             return;
         }
-        var classString = "mapPointPulse ";
-        var labelAnchorOffset = 0;
+        let classString = "mapPointPulse ";
+        let labelAnchorOffset = 0;
         switch (size) {
             case "small":
                 classString = classString + "pulseSizeSmall ";
@@ -297,15 +298,15 @@
         });
         marker.setMap(this.map);
        
-        setTimeout(() => {
-            marker.setMap(null);
+       var timeout = setTimeout(() => {
+           marker.setMap(null);
+           clearTimeout(timeout);
         }, this.animationTimeout);
-        // return marker;
 
     }
 
     clearUsedMarkers() {
-        for (var i = 0; i < this.markers.length; i++) {
+        for (let i = 0; i < this.markers.length; i++) {
             if (this.markers[i].getMap() == null) {
                 this.markers.splice(i, 1);
                 break;
@@ -313,7 +314,7 @@
         }
     }
     clearUsedLines() {
-        for (var i = 0; i < this.lines.length; i++) {
+        for (let i = 0; i < this.lines.length; i++) {
             if (this.lines[i].getMap() == null) {
                 this.lines.splice(i, 1);
                 break;

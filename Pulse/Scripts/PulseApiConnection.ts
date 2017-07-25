@@ -43,7 +43,7 @@ class InteractionEvent {
 }
 
 class PulseApiConnection {
-    currentTime: moment.Moment
+    currentTime: moment.Moment;
     standAloneEvents: StandAloneEvent[];
     interactionEvents: InteractionEvent[];
     commentEvents: InteractionEvent[];
@@ -137,8 +137,9 @@ class PulseApiConnection {
 
         // this.pulseMap.clearUsedLines();
         //  this.pulseMap.clearUsedMarkers();
-        for (var i = 0; i < this.standAloneEvents.length; i++) {
-            let event = this.standAloneEvents[i];
+        let i: number;
+        for (i = 0; i < this.standAloneEvents.length; i++) {
+            const event = this.standAloneEvents[i];
             if (offsetTime.isSameOrAfter(event.OccuredOn)) {
                     this.pulseMap.addMarker(new google.maps.LatLng(event.Latitude, event.Longitude), 1, "normal");                
                 this.newListings++;
@@ -146,27 +147,27 @@ class PulseApiConnection {
             }
         }
 
-        for (var i = 0; i < this.interactionEvents.length; i++) {
-            let ievent = this.interactionEvents[i];
+        for (i = 0; i < this.interactionEvents.length; i++) {
+            const ievent = this.interactionEvents[i];
             if (offsetTime.isSameOrAfter(ievent.OccuredOn)) {
                 this.pulseMap.addInteraction(new google.maps.LatLng(ievent.StartLatitude, ievent.StartLongitude), new google.maps.LatLng(ievent.EndLatitude, ievent.EndLongitude));
                 this.soldListings++;
                 this.interactionEvents.splice(i, 1);
             }
         }
-        for (var i = 0; i < this.commentEvents.length; i++) {
-            let event = this.commentEvents[i];
+        for (i = 0; i < this.commentEvents.length; i++) {
+            const event = this.commentEvents[i];
             if (offsetTime.isSameOrAfter(event.OccuredOn)) {
                 this.pulseMap.addComment(new google.maps.LatLng(event.StartLatitude, event.StartLongitude), new google.maps.LatLng(event.EndLatitude, event.EndLongitude));
                 this.commentEvents.splice(i, 1);
             }
         }
-       // if (this.newListings > 0) {
+         if (this.newListings > 0) {
             this.newElement.text(this.newListings);
-       // }
-       // if (this.soldListings > 0) {
+        }
+        if (this.soldListings > 0) {
             this.soldElement.text(this.soldListings);
-       // }
+        }
     }
 
     setTime() {

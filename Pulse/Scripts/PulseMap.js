@@ -12,7 +12,6 @@ var PulseMap = (function () {
         };
     }
     PulseMap.prototype.createMap = function () {
-        var _this = this;
         var mapOptions = {
             center: this.wellington,
             zoom: 6,
@@ -177,18 +176,18 @@ var PulseMap = (function () {
             }
         ]);
         //This event listener will call addMarker() when the map is clicked.
-        google.maps.event.addListener(this.map, 'click', function (event) {
-            _this.addMarker(event.latLng, 1, 'normal');
-        });
+        //  google.maps.event.addListener(this.map, 'click', event => {
+        //     this.addMarker(event.latLng, 1, 'normal');
+        // });
         return this.map;
     };
     PulseMap.prototype.addInteraction = function (startLocation, endLocation) {
         if (document.hidden) {
             return;
         }
-        this.addMarker(startLocation, 3, 'normal');
-        this.addLineAnimation(startLocation, endLocation, '#00FFCD');
-        this.addMarker(endLocation, 3, 'normal');
+        this.addMarker(startLocation, 3, "normal");
+        this.addLineAnimation(startLocation, endLocation, "#00FFCD");
+        this.addMarker(endLocation, 3, "normal");
     };
     PulseMap.prototype.addComment = function (startLocation, endLocation) {
         if (document.hidden) {
@@ -203,7 +202,7 @@ var PulseMap = (function () {
             path: [startLocation, endLocation],
             icons: [{
                     icon: this.lineSymbol,
-                    offset: '0%'
+                    offset: "0%"
                 }],
             geodesic: true,
             strokeColor: strokeColor,
@@ -211,11 +210,11 @@ var PulseMap = (function () {
             strokeWeight: 2
         });
         var count = 0;
-        var interval = window.setInterval(function () {
+        var interval = setInterval(function () {
             count = (count + 1);
-            var icons = path.get('icons');
-            icons[0].offset = count + '%';
-            path.set('icons', icons);
+            var icons = path.get("icons");
+            icons[0].offset = count + "%";
+            path.set("icons", icons);
             if (count >= 100) {
                 icons[0].icon = null;
                 path.setMap(null);
@@ -224,8 +223,9 @@ var PulseMap = (function () {
         }, this.animationTimeout / 150);
         this.lines.push(path);
         path.setMap(this.map);
-        setTimeout(function () {
+        var timer = setTimeout(function () {
             path.setMap(null);
+            clearTimeout(timer);
         }, this.animationTimeout);
     };
     // Add a marker to the map and push to the array.
@@ -278,10 +278,10 @@ var PulseMap = (function () {
             labelAnchor: new google.maps.Point(labelAnchorOffset, labelAnchorOffset)
         });
         marker.setMap(this.map);
-        setTimeout(function () {
+        var timeout = setTimeout(function () {
             marker.setMap(null);
+            clearTimeout(timeout);
         }, this.animationTimeout);
-        // return marker;
     };
     PulseMap.prototype.clearUsedMarkers = function () {
         for (var i = 0; i < this.markers.length; i++) {

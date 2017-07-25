@@ -87,7 +87,8 @@ var PulseApiConnection = (function () {
         }
         // this.pulseMap.clearUsedLines();
         //  this.pulseMap.clearUsedMarkers();
-        for (var i = 0; i < this.standAloneEvents.length; i++) {
+        var i;
+        for (i = 0; i < this.standAloneEvents.length; i++) {
             var event_1 = this.standAloneEvents[i];
             if (offsetTime.isSameOrAfter(event_1.OccuredOn)) {
                 this.pulseMap.addMarker(new google.maps.LatLng(event_1.Latitude, event_1.Longitude), 1, "normal");
@@ -95,7 +96,7 @@ var PulseApiConnection = (function () {
                 this.standAloneEvents.splice(i, 1);
             }
         }
-        for (var i = 0; i < this.interactionEvents.length; i++) {
+        for (i = 0; i < this.interactionEvents.length; i++) {
             var ievent = this.interactionEvents[i];
             if (offsetTime.isSameOrAfter(ievent.OccuredOn)) {
                 this.pulseMap.addInteraction(new google.maps.LatLng(ievent.StartLatitude, ievent.StartLongitude), new google.maps.LatLng(ievent.EndLatitude, ievent.EndLongitude));
@@ -103,19 +104,19 @@ var PulseApiConnection = (function () {
                 this.interactionEvents.splice(i, 1);
             }
         }
-        for (var i = 0; i < this.commentEvents.length; i++) {
+        for (i = 0; i < this.commentEvents.length; i++) {
             var event_2 = this.commentEvents[i];
             if (offsetTime.isSameOrAfter(event_2.OccuredOn)) {
                 this.pulseMap.addComment(new google.maps.LatLng(event_2.StartLatitude, event_2.StartLongitude), new google.maps.LatLng(event_2.EndLatitude, event_2.EndLongitude));
                 this.commentEvents.splice(i, 1);
             }
         }
-        // if (this.newListings > 0) {
-        this.newElement.text(this.newListings);
-        // }
-        // if (this.soldListings > 0) {
-        this.soldElement.text(this.soldListings);
-        // }
+        if (this.newListings > 0) {
+            this.newElement.text(this.newListings);
+        }
+        if (this.soldListings > 0) {
+            this.soldElement.text(this.soldListings);
+        }
     };
     PulseApiConnection.prototype.setTime = function () {
         this.currentTime = moment();
