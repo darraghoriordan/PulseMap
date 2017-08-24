@@ -1,0 +1,113 @@
+﻿html {
+    background: #000;
+}
+
+.container {
+    margin: 30px auto;
+    border: 1px solid #333;
+    background: #55c1e7;
+}
+
+/*--extend--*/
+.area, .fore, .mid, .bk, .container {
+    width: 600px;
+    height: 288px;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+}
+
+.figure {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/dog-walk.svg") no-repeat;
+    width: 220px;
+    height: 266px;
+    -webkit-transform: translate3D(200px, 50px, 0);
+    transform: translate3D(200px, 50px, 0);
+    -webkit-animation: walk 0.78s steps(9) infinite;
+    animation: walk 0.78s steps(9) infinite;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+}
+
+.no-svg .figure {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/dog-walk.png");
+}
+
+.fore {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/foreground.svg");
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: bk 7s -5s linear infinite;
+    animation: bk 7s -5s linear infinite;
+}
+
+.no-svg .fore {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/foreground.png");
+}
+
+.mid {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/midground.svg");
+    -webkit-animation: bk 15s -5s linear infinite;
+    animation: bk 15s -5s linear infinite;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.no-svg .mid {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/midground.png");
+}
+
+.bk {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/background.svg");
+    -webkit-animation: bk 20s -5s linear infinite;
+    animation: bk 20s -5s linear infinite;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.no-svg .bk {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/background.png");
+}
+
+@-webkit-keyframes walk {
+    100% {
+        background-position: 0 -2376px;
+    }
+}
+
+@keyframes walk {
+    100% {
+        background-position: 0 -2376px;
+    }
+}
+
+@-webkit-keyframes bk {
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes bk {
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+        margin-top: 0;
+    }
+
+    .figure {
+        -webkit-transform: translate3D(40%, 50px, 0);
+        transform: translate3D(40%, 50px, 0);
+    }
+}
