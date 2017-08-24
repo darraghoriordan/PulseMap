@@ -7,7 +7,7 @@ namespace Pulse.Controllers
         // GET: Motors
         public ActionResult Index()
         {
-            return View();
+            return PartialView("Index");
         }
     }
 }

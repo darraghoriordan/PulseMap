@@ -303,6 +303,9 @@
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Scripts\animations.js" />
+    <Content Include="Scripts\anime.js" />
+    <Content Include="Scripts\two.js" />
     <Content Include="Views\Motors\Index.cshtml" />
     <TypeScriptCompile Include="Scripts\app.ts" />
     <Content Include="Scripts\bootstrap.js" />

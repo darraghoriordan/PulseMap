@@ -59,10 +59,25 @@ body {
 #totalDealerGmsStat {
     display: flex;
     /* align-items: center; */
-    min-height: 100%;
-    min-height: 100vh;
+    min-height: 60%;
+    min-height: 60vh;
     align-items: center;
     justify-content: center;
+    background-color: #728CA6;
+}
+
+.verticalContainer {
+    display: flex;
+    flex-grow: 0;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.movementCanvas {
+ 
+    min-height: 40%;
+    min-height: 40vh;
+
 }
 
 .statsItem {
@@ -71,6 +86,10 @@ body {
     width: auto;
     padding-left: 30px;
     padding-right: 80px;
+}
+
+#totalDealerGmsStat.statsItem {
+    margin-bottom: 0px;
 }
 
 #logoHolder {
@@ -117,7 +136,6 @@ body {
     color: #FF9AAE;
     padding-left: 50px;
 }
-
 
 #map-canvas {
     position: absolute;

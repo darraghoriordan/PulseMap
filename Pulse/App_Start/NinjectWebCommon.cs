@@ -66,7 +66,7 @@ namespace Pulse.App_Start
             kernel.Load(new NinjectModules.MainNinjectModule());
 
             // use the following for testing
-         //  kernel.Load(new NinjectModules.FakedNinjectModule());
+           kernel.Load(new NinjectModules.FakedNinjectModule());
 
             GlobalConfiguration.Configuration.DependencyResolver = new NinjectDependencyResolver(kernel);
         }        

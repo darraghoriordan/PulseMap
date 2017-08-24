@@ -2,17 +2,40 @@
 @{
     ViewBag.Title = "Index";
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/Dealerbase-Font.css" rel="stylesheet" />
 
-<div class="statsItem" id="totalDealerGmsStat">
-    <span class="statsValueText">Starting...</span>
-</div>
-@section scripts{
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <div class="verticalContainer">
+        <div class="statsItem" id="totalDealerGmsStat">
+            <span class="statsValueText">Starting...</span>
+        </div>
+        <div id="movementCanvas">
+        
+        </div>
+    </div>
+    <script type="text/javascript" src="~/Scripts/moment.js"></script>
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/two.js"></script>
     <script type="text/javascript" src="~/Scripts/StatCounter.js"></script>
+
+    <script src="~/Scripts/animations.js"></script>
     <script type="text/javascript">
         $(document).ready(() => {
-            var statHelper = new StatCounter();         
+            var statHelper = new StatCounter();
             statHelper.startEventsService();
-
+           
+            customAnimations.startAnimations();
         });
     </script>
-    }
+
+</body>
+
+</html>
