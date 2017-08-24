@@ -1,10 +1,4 @@
-﻿html {
-    background: #000;
-}
-
-.container {
-    margin: 30px auto;
-    border: 1px solid #333;
+﻿.container {
     background: #55c1e7;
 }
 
@@ -21,7 +15,7 @@
 }
 
 .figure {
-    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/dog-walk.svg") no-repeat;
+    background: url("/Content/kevanimation/dog-walk.svg") no-repeat;
     width: 220px;
     height: 266px;
     -webkit-transform: translate3D(200px, 50px, 0);
@@ -37,11 +31,11 @@
 }
 
 .no-svg .figure {
-    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/dog-walk.png");
+    background: url("/Content/kevanimation/dog-walk.png");
 }
 
 .fore {
-    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/foreground.svg");
+    background: url("/Content/kevanimation/foreground.svg");
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     -webkit-animation: bk 7s -5s linear infinite;
@@ -49,11 +43,11 @@
 }
 
 .no-svg .fore {
-    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/foreground.png");
+    background: url("/Content/kevanimation/foreground.png");
 }
 
 .mid {
-    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/midground.svg");
+    background: url("/Content/kevanimation/midground.svg");
     -webkit-animation: bk 15s -5s linear infinite;
     animation: bk 15s -5s linear infinite;
     -webkit-transform: translateZ(0);
@@ -61,11 +55,11 @@
 }
 
 .no-svg .mid {
-    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/midground.png");
+    background: url("/Content/kevanimation/midground.png");
 }
 
 .bk {
-    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/background.svg");
+    background: url("/Content/kevanimation/background.svg");
     -webkit-animation: bk 20s -5s linear infinite;
     animation: bk 20s -5s linear infinite;
     -webkit-transform: translateZ(0);
@@ -73,7 +67,7 @@
 }
 
 .no-svg .bk {
-    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/57786/background.png");
+    background: url("/Content/kevanimation/background.png");
 }
 
 @-webkit-keyframes walk {
