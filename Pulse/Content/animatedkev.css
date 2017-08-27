@@ -2,7 +2,7 @@
     background: #5C697A;
     padding: 0;
 }
-
+body { background: #5C697A; }
 /*--extend--*/
 .area, .fore, .mid, .bk, .container {
     width: 100%;
@@ -62,7 +62,7 @@
 }
 
 .bk {
-    background: url("/Content/kevanimation/cityscape-2.svg");
+    background: url("/Content/kevanimation/cityscape-5.svg");
     -webkit-animation: bk 20s -5s linear infinite;
     animation: bk 20s -5s linear infinite;
     -webkit-transform: translateZ(0);
