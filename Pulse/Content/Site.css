@@ -45,14 +45,14 @@ body {
         font-size: 10em;
     }
 }
-@media(min-width:992px) {
+@media(min-width:1200px) {
     div#totalDealerGmsStat > .statsValueText {
         font-size: 15em;
     }
 }
 @media(min-width:1400px) {
     div#totalDealerGmsStat > .statsValueText {
-        font-size: 20em;
+        font-size: 16em;
     }
 }
 
@@ -63,8 +63,8 @@ body {
     min-height: 60vh;
     align-items: center;
     justify-content: center;
-    background-color: #55c1e7;
-    color:#fff;
+    background-color: #5C697A;
+    color: #fff;
 }
 
 .verticalContainer {
@@ -91,7 +91,12 @@ body {
 
 #totalDealerGmsStat.statsItem {
     margin-bottom: 0px;
-    border-bottom:0;
+    border-bottom: 0;
+}
+
+#totalDealerGmsStat > .statsValueText {
+    font-family: 'Inconsolata', monospace;
+    font-weight:bold;
 }
 
 #logoHolder {

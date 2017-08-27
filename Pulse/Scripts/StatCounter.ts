@@ -15,7 +15,10 @@ class StatCounter {
     currentTime: moment.Moment;
     nextUpdateDue: moment.Moment;
     numberFormat: Intl.NumberFormat;
-    localPlaybackOffset:number;
+    localPlaybackOffset: number;
+    frameLengthMilliseconds: number;
+    updateRate: number;
+
     constructor() {
         this.nextUpdateDue = moment('2015-10-15');
         this.totalDealerGms = 0;
@@ -27,10 +30,12 @@ class StatCounter {
             currency: 'NZD',
             minimumFractionDigits: 0
         });
+        this.updateRate = 0;
+        this.frameLengthMilliseconds = 50;
     }
 
     startEventsService() {
-        setInterval(() => { this.updateEvents(); }, 500);
+        setInterval(() => { this.updateEvents(); }, this.frameLengthMilliseconds);
     }
 
     getNewEvents(startDate: moment.Moment, endDate: moment.Moment) {
@@ -46,6 +51,14 @@ class StatCounter {
                     currentInstance.totalDealerGmsStats = $.map(cdata, (x) => {
                         return new StatModel(x);
                     });
+                //calculate the rate of increase per frame/loop
+                if (currentInstance.totalDealerGmsStats.length > 0) {
+                    let maxAmount: number = currentInstance.totalDealerGmsStats[currentInstance.totalDealerGmsStats.length - 1].StartStat;
+                    let minAmount: number = currentInstance.totalDealerGmsStats[0].StartStat;
+                    let deltaAmount = maxAmount - minAmount;
+                    let numberOfFrames: number = currentInstance.localPlaybackOffset * 60 * (1000 / currentInstance.frameLengthMilliseconds);
+                    currentInstance.updateRate = Math.round(deltaAmount / numberOfFrames);
+                }
             }
         );
 
@@ -54,20 +67,25 @@ class StatCounter {
             function (cdata) {
                 if (cdata)
                     currentInstance.totalDealerGms = cdata;
+         
             }
         );
-    }
 
+    }
+    
     updateEvents() {
 
         this.currentTime = moment();
         let offsetTime = moment().subtract(this.localPlaybackOffset, "m");
 
+        //dy/dx
+        this.totalDealerGms += this.updateRate;
+
         if (this.currentTime.isSameOrAfter(this.nextUpdateDue)) {
             this.getNewEvents(offsetTime, this.currentTime);
             // set when last update occured
             this.nextUpdateDue = moment(this.currentTime).add(this.localPlaybackOffset, "m");
-        }
+          }
 
         for (var i = 0; i < this.totalDealerGmsStats.length; i++) {
             let event = this.totalDealerGmsStats[i];

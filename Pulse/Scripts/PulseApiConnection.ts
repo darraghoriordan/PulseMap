@@ -62,6 +62,7 @@ class PulseApiConnection {
         this.interactionEvents = new Array<InteractionEvent>();
         this.newListings = 0;
         this.soldListings = 0;
+     
         this.nextUpdateDue = moment('2015-10-15');
         this.timeElement = $('#timeStat .statsValueText');
         this.newElement = $('#itemsListedStat .statsValueText');
@@ -134,9 +135,7 @@ class PulseApiConnection {
             // set when last update occured
             this.nextUpdateDue = moment(this.currentTime).add(5, "m");
         }
-
-        // this.pulseMap.clearUsedLines();
-        //  this.pulseMap.clearUsedMarkers();
+  
         let i: number;
         for (i = 0; i < this.standAloneEvents.length; i++) {
             const event = this.standAloneEvents[i];

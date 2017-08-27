@@ -1,6 +1,6 @@
 ﻿.container {
-    background: #55c1e7;
-    padding:0;
+    background: #5C697A;
+    padding: 0;
 }
 
 /*--extend--*/
@@ -18,15 +18,15 @@
 .figure {
     margin-left: auto;
     margin-right: auto;
-    background: url("/Content/kevanimation/dog-walk.svg") no-repeat;
+    background: url("/Content/kevanimation/walk_kevin_4.svg") no-repeat;
     width: 220px;
     height: 266px;
     -webkit-transform: translate3D(200px, 50px, 0);
     transform: translate3D(200px, 50px, 0);
     -webkit-animation: walk 0.78s steps(9) infinite;
     animation: walk 0.78s steps(9) infinite;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    -webkit-transform: translateZ(0) scale(1.3);
+    transform: translateZ(0) scale(1.3);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -webkit-perspective: 1000;
@@ -62,7 +62,7 @@
 }
 
 .bk {
-    background: url("/Content/kevanimation/background.svg");
+    background: url("/Content/kevanimation/background_wide.svg");
     -webkit-animation: bk 20s -5s linear infinite;
     animation: bk 20s -5s linear infinite;
     -webkit-transform: translateZ(0);
@@ -87,13 +87,13 @@
 
 @-webkit-keyframes bk {
     100% {
-        background-position: 200% 0;
+        background-position: 300% 0;
     }
 }
 
 @keyframes bk {
     100% {
-        background-position: 200% 0;
+        background-position: 300% 0;
     }
 }
 
@@ -106,5 +106,17 @@
     .figure {
         -webkit-transform: translate3D(40%, 50px, 0);
         transform: translate3D(40%, 50px, 0);
+    }
+
+    @-webkit-keyframes bk {
+        100% {
+            background-position: 100% 0;
+        }
+    }
+
+    @keyframes bk {
+        100% {
+            background-position: 100% 0;
+        }
     }
 }

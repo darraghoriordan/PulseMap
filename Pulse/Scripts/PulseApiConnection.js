@@ -85,8 +85,6 @@ var PulseApiConnection = (function () {
             // set when last update occured
             this.nextUpdateDue = moment(this.currentTime).add(5, "m");
         }
-        // this.pulseMap.clearUsedLines();
-        //  this.pulseMap.clearUsedMarkers();
         var i;
         for (i = 0; i < this.standAloneEvents.length; i++) {
             var event_1 = this.standAloneEvents[i];
