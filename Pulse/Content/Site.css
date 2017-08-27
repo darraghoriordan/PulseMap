@@ -63,7 +63,8 @@ body {
     min-height: 60vh;
     align-items: center;
     justify-content: center;
-    background-color: #728CA6;
+    background-color: #55c1e7;
+    color:#fff;
 }
 
 .verticalContainer {
@@ -90,6 +91,7 @@ body {
 
 #totalDealerGmsStat.statsItem {
     margin-bottom: 0px;
+    border-bottom:0;
 }
 
 #logoHolder {
