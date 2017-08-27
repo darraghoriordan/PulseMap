@@ -62,7 +62,7 @@
 }
 
 .bk {
-    background: url("/Content/kevanimation/background_wide.svg");
+    background: url("/Content/kevanimation/cityscape-2.svg");
     -webkit-animation: bk 20s -5s linear infinite;
     animation: bk 20s -5s linear infinite;
     -webkit-transform: translateZ(0);

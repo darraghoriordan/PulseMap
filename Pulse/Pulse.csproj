@@ -23,6 +23,7 @@
     <IISExpressUseClassicPipelineMode />
     <TypeScriptToolsVersion>2.4</TypeScriptToolsVersion>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -282,9 +283,11 @@
     <Content Include="Content\icon_sold.png" />
     <Content Include="Content\icon_time.png" />
     <Content Include="Content\kevanimation\background.svg" />
+    <Content Include="Content\kevanimation\cityscape-2.svg" />
     <Content Include="Content\kevanimation\dog-walk.svg" />
     <Content Include="Content\kevanimation\foreground.svg" />
     <Content Include="Content\kevanimation\midground.svg" />
+    <Content Include="Content\kevanimation\walk_kevin_4.svg" />
     <Content Include="Content\Logo_Pulse_900x400.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -310,6 +313,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Scripts\animations.js" />
     <Content Include="Scripts\anime.js" />
+    <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\two.js" />
     <Content Include="Views\Motors\Index.cshtml" />
     <TypeScriptCompile Include="Scripts\app.ts" />
