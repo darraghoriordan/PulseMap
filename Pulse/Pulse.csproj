@@ -283,8 +283,7 @@
     <Content Include="Content\icon_sold.png" />
     <Content Include="Content\icon_time.png" />
     <Content Include="Content\kevanimation\background.svg" />
-    <Content Include="Content\kevanimation\cityscape-2.svg" />
-    <Content Include="Content\kevanimation\cityscape-5.svg" />
+    <Content Include="Content\kevanimation\cityscape-5-1.svg" />
     <Content Include="Content\kevanimation\dog-walk.svg" />
     <Content Include="Content\kevanimation\foreground.svg" />
     <Content Include="Content\kevanimation\midground.svg" />
