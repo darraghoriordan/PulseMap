@@ -67,17 +67,17 @@ namespace Pulse.Services
         public IEnumerable<DealerGmsStatModel> GetLatestStatsTotalDealerGms(DateTime startDate, DateTime endDate)
         {
             var list = new List<DealerGmsStatModel>();
-            int selector = GetSelector(_rnd2, startDate, endDate);
+            int selector = 3;//GetSelector(_rnd2, startDate, endDate);
             list.Add(GetRandomStatEvent(_rnd2, startDate, endDate));
             for (var i = 0; i <= selector; i++)
             {
                 list.Add(GetRandomStatEvent(_rnd2, startDate, endDate));
             }
-            var statVal = 100000;
+            var statVal = 0;
             foreach (var s in list.OrderBy(x => x.OccuredOn))
             {
                 s.StartStat = statVal;
-                statVal += _rnd2.Next(1, 1000);
+                statVal += _rnd2.Next(1, 100000);
             }
 
             return list;

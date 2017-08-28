@@ -53,11 +53,10 @@ class StatCounter {
                     });
                 //calculate the rate of increase per frame/loop
                 if (currentInstance.totalDealerGmsStats.length > 0) {
-                    let maxAmount: number = currentInstance.totalDealerGmsStats[currentInstance.totalDealerGmsStats.length - 1].StartStat;
-                    let minAmount: number = currentInstance.totalDealerGmsStats[0].StartStat;
-                    let deltaAmount = maxAmount - minAmount;
+                    let maxAmount: number = currentInstance.totalDealerGmsStats.reduce(function (sum, stat) { return sum + stat.StartStat; },0);
+                                     
                     let numberOfFrames: number = currentInstance.localPlaybackOffset * 60 * (1000 / currentInstance.frameLengthMilliseconds);
-                    currentInstance.updateRate = Math.round(deltaAmount / numberOfFrames);
+                    currentInstance.updateRate = Math.round(maxAmount / numberOfFrames);
                 }
             }
         );
@@ -92,7 +91,7 @@ class StatCounter {
             let offset = offsetTime.toISOString();
             let occ = event.OccuredOn.toISOString();
             if (offsetTime.isSameOrAfter(event.OccuredOn)) {
-                this.totalDealerGms += event.StartStat;
+               // this.totalDealerGms += event.StartStat;
                 this.totalDealerGmsStats.splice(i, 1);
             }
         }

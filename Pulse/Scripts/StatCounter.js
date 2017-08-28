@@ -36,11 +36,9 @@ var StatCounter = (function () {
                 });
             //calculate the rate of increase per frame/loop
             if (currentInstance.totalDealerGmsStats.length > 0) {
-                var maxAmount = currentInstance.totalDealerGmsStats[currentInstance.totalDealerGmsStats.length - 1].StartStat;
-                var minAmount = currentInstance.totalDealerGmsStats[0].StartStat;
-                var deltaAmount = maxAmount - minAmount;
+                var maxAmount = currentInstance.totalDealerGmsStats.reduce(function (sum, stat) { return sum + stat.StartStat; }, 0);
                 var numberOfFrames = currentInstance.localPlaybackOffset * 60 * (1000 / currentInstance.frameLengthMilliseconds);
-                currentInstance.updateRate = Math.round(deltaAmount / numberOfFrames);
+                currentInstance.updateRate = Math.round(maxAmount / numberOfFrames);
             }
         });
         $.get("/api/statistics/totaldealergms", { startDate: startOfDay, endDate: sdString }, function (cdata) {
@@ -63,7 +61,7 @@ var StatCounter = (function () {
             var offset = offsetTime.toISOString();
             var occ = event_1.OccuredOn.toISOString();
             if (offsetTime.isSameOrAfter(event_1.OccuredOn)) {
-                this.totalDealerGms += event_1.StartStat;
+                // this.totalDealerGms += event.StartStat;
                 this.totalDealerGmsStats.splice(i, 1);
             }
         }
