@@ -24,7 +24,7 @@ class StatCounter {
         this.totalDealerGms = 0;
         this.totalDealerElement = $('#totalDealerGmsStat .statsValueText');
         this.totalDealerGmsStats = new Array<StatModel>();
-        this.localPlaybackOffset = 5;
+        this.localPlaybackOffset = 1;
         this.numberFormat = new Intl.NumberFormat('en-NZ', {
             style: 'currency',
             currency: 'NZD',
@@ -43,6 +43,8 @@ class StatCounter {
         let sdString = startDate.toISOString();
         let edString = endDate.toISOString();
         var startOfDay = moment().startOf("day").toISOString();
+        let maxAmount: number = 0;
+        let numberOfFrames: number=0;
         $.get(
             "/api/events/newdealergms", { startDate: sdString, endDate: edString },
             function (cdata) {
@@ -52,11 +54,12 @@ class StatCounter {
                         return new StatModel(x);
                     });
                 //calculate the rate of increase per frame/loop
+                currentInstance.updateRate = 0;
                 if (currentInstance.totalDealerGmsStats.length > 0) {
-                    let maxAmount: number = currentInstance.totalDealerGmsStats.reduce(function (sum, stat) { return sum + stat.StartStat; },0);
+                    maxAmount = currentInstance.totalDealerGmsStats.reduce(function (sum, stat) { return sum + stat.StartStat; },0);
                                      
-                    let numberOfFrames: number = currentInstance.localPlaybackOffset * 60 * (1000 / currentInstance.frameLengthMilliseconds);
-                    currentInstance.updateRate = Math.round(maxAmount / numberOfFrames);
+                    numberOfFrames = currentInstance.localPlaybackOffset * 60 * (1000 / currentInstance.frameLengthMilliseconds);
+                    currentInstance.updateRate = Math.floor(maxAmount / numberOfFrames);
                 }
             }
         );
@@ -64,8 +67,20 @@ class StatCounter {
         $.get(
             "/api/statistics/totaldealergms", { startDate: startOfDay, endDate: sdString },
             function (cdata) {
+                let logMessage = "setting current total (" +
+                        currentInstance.numberFormat.format(currentInstance.totalDealerGms) +
+                        ") to " +
+                        currentInstance.numberFormat.format(cdata);
                 if (cdata)
-                    currentInstance.totalDealerGms = cdata;
+                    
+                    if (currentInstance.totalDealerGms > cdata) {
+                        console.error("[OVERRUN] "+logMessage);
+                    } else {
+                        console.log(logMessage);
+                    }
+                console.log("climbing " + currentInstance.numberFormat.format(maxAmount) + " to " + currentInstance.numberFormat.format(cdata + maxAmount) + " at " + currentInstance.numberFormat.format(currentInstance.updateRate * (1000 / currentInstance.frameLengthMilliseconds)) + ' per second');
+
+                currentInstance.totalDealerGms = cdata;
          
             }
         );
